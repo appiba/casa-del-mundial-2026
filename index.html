@@ -1,173 +1,141 @@
-<section class="panel" id="acceso">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa del Mundial 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-  <div class="panel-title">
-    <span>ACCESO DE PARTICIPANTE</span>
-    <h3>Ingresa a tu quiniela</h3>
+<body>
+
+<header class="hero">
+  <nav class="navbar">
+    <div class="logo-box">
+      <span class="logo-icon">🏆</span>
+      <div>
+        <h1>Casa del Mundial 2026</h1>
+        <p>Quiniela Mundialista Oficial</p>
+      </div>
+    </div>
+
+    <button id="btnSalir" style="display:none;">Salir</button>
+  </nav>
+
+  <div class="hero-content">
+    <span class="badge">Mundial FIFA 2026</span>
+    <h2>Pronostica. Compite. Gana.</h2>
+    <p>Ingresa con tu cédula y celular si ya estás inscrito, o regístrate para participar.</p>
   </div>
+</header>
 
-  <div class="auth-tabs">
+<main>
 
-    <button
-      class="filter active"
-      id="tabLogin"
-      type="button"
-    >
-      Ya estoy inscrito
-    </button>
-
-    <button
-      class="filter"
-      id="tabRegistro"
-      type="button"
-    >
-      Registrarme
-    </button>
-
-  </div>
-
-  <!-- LOGIN -->
-
-  <form id="loginForm">
-
-    <div class="form-group">
-
-      <label>
-        Cédula / Usuario
-      </label>
-
-      <input
-        type="text"
-        id="loginCedula"
-        required
-      >
-
+  <section class="stats">
+    <div class="stat-card">
+      <span>Partidos</span>
+      <strong id="totalPartidos">0</strong>
     </div>
 
-    <div class="form-group">
-
-      <label>
-        Celular / Clave
-      </label>
-
-      <input
-        type="text"
-        id="loginCelular"
-        required
-      >
-
-      <p class="mini-info">
-
-        Tu clave es tu número celular
-        SIN el 0 inicial.
-
-        <br><br>
-
-        Ejemplo:
-        984530850
-
-      </p>
-
+    <div class="stat-card">
+      <span>Ranking</span>
+      <strong id="totalRanking">0</strong>
     </div>
 
-    <div class="form-group full">
+    <div class="stat-card">
+      <span>Mis puntos</span>
+      <strong id="misPuntos">0</strong>
+    </div>
+  </section>
 
-      <button
-        class="submit-btn"
-        type="submit"
-      >
+  <section class="panel" id="acceso">
 
-        Ingresar a mi quiniela
-
-      </button>
-
+    <div class="panel-title">
+      <span>ACCESO DE PARTICIPANTE</span>
+      <h3>Ingresa a tu quiniela</h3>
     </div>
 
-  </form>
-
-  <!-- REGISTRO -->
-
-  <form
-    id="registroForm"
-    style="display:none;"
-  >
-
-    <div class="form-group">
-
-      <label>Nombres</label>
-
-      <input
-        type="text"
-        id="nombres"
-        required
-      >
-
+    <div class="auth-tabs">
+      <button class="filter active" id="tabLogin" type="button">Ya estoy inscrito</button>
+      <button class="filter" id="tabRegistro" type="button">Registrarme</button>
     </div>
 
-    <div class="form-group">
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Cédula / Usuario</label>
+        <input type="text" id="loginCedula" required>
+      </div>
 
-      <label>Apellidos</label>
+      <div class="form-group">
+        <label>Celular / Clave</label>
+        <input type="text" id="loginCelular" required>
+        <p class="mini-info">Tu clave es tu celular SIN el 0 inicial. Ejemplo: 984530850</p>
+      </div>
 
-      <input
-        type="text"
-        id="apellidos"
-        required
-      >
+      <button class="submit-btn full" type="submit">Ingresar a mi quiniela</button>
+    </form>
 
+    <form id="registroForm" style="display:none;">
+      <div class="form-group">
+        <label>Nombres</label>
+        <input type="text" id="nombres" required>
+      </div>
+
+      <div class="form-group">
+        <label>Apellidos</label>
+        <input type="text" id="apellidos" required>
+      </div>
+
+      <div class="form-group">
+        <label>Cédula</label>
+        <input type="text" id="cedula" required>
+      </div>
+
+      <div class="form-group">
+        <label>Celular</label>
+        <input type="text" id="celular" required>
+      </div>
+
+      <div class="warning-box full">
+        ⚠️ Para participar por premios debes ingresar nombres reales, cédula única y celular único.
+      </div>
+
+      <button class="submit-btn full" type="submit">Crear inscripción</button>
+    </form>
+
+  </section>
+
+  <section class="panel" id="miCuenta" style="display:none;">
+    <div class="panel-title">
+      <span>MI CUENTA</span>
+      <h3>Participante activo</h3>
+    </div>
+    <div id="participanteActivo"></div>
+  </section>
+
+  <section class="panel" id="partidos" style="display:none;">
+    <div class="panel-title">
+      <span>CALENDARIO OFICIAL</span>
+      <h3>Fases y pronósticos</h3>
     </div>
 
-    <div class="form-group">
+    <div id="faseTabs" class="filters"></div>
+    <div id="listaPartidos"></div>
+  </section>
 
-      <label>Cédula</label>
-
-      <input
-        type="text"
-        id="cedula"
-        required
-      >
-
+  <section class="panel" id="ranking">
+    <div class="panel-title">
+      <span>CLASIFICACIÓN GENERAL</span>
+      <h3>Ranking Mundialista</h3>
     </div>
+    <div id="rankingContainer"></div>
+  </section>
 
-    <div class="form-group">
+</main>
 
-      <label>Celular</label>
+<div id="toast"></div>
 
-      <input
-        type="text"
-        id="celular"
-        required
-      >
+<script src="script.js"></script>
 
-    </div>
-
-    <div class="warning-box">
-
-      ⚠️ Para participar por premios debes ingresar:
-
-      <br><br>
-
-      • Nombres reales<br>
-      • Número de cédula único<br>
-      • Número celular único
-
-      <br><br>
-
-      El sistema bloquea registros duplicados automáticamente.
-
-    </div>
-
-    <div class="form-group full">
-
-      <button
-        class="submit-btn"
-        type="submit"
-      >
-
-        Registrarme
-
-      </button>
-
-    </div>
-
-  </form>
-
-</section>
+</body>
+</html>
