@@ -1,8 +1,185 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbyvYZa5VUVgydteQgC0HmzjtRbgCZxIlwnrI3awmggOB_FE9Wl2_ES1zPvVyu6TF2MicQ/exec';
+const API_URL =
+'https://script.google.com/macros/s/AKfycbyvYZa5VUVgydteQgC0HmzjtRbgCZxIlwnrI3awmggOB_FE9Wl2_ES1zPvVyu6TF2MicQ/exec';
 
-const listaPartidos = document.getElementById('listaPartidos');
+const registroForm =
+document.getElementById('registroForm');
 
-const toast = document.getElementById('toast');
+const listaPartidos =
+document.getElementById('listaPartidos');
+
+const participanteActivo =
+document.getElementById('participanteActivo');
+
+const toast =
+document.getElementById('toast');
+
+/* =========================
+TOAST
+========================= */
+
+function mostrarToast(texto){
+
+  toast.innerText = texto;
+
+  toast.classList.add('show');
+
+  setTimeout(() => {
+
+    toast.classList.remove('show');
+
+  },3000);
+
+}
+
+/* =========================
+REGISTRO
+========================= */
+
+registroForm.addEventListener('submit', async (e)=>{
+
+  e.preventDefault();
+
+  const nombres =
+  document.getElementById('nombres').value.trim();
+
+  const apellidos =
+  document.getElementById('apellidos').value.trim();
+
+  const cedula =
+  document.getElementById('cedula').value.trim();
+
+  const celular =
+  document.getElementById('celular').value.trim();
+
+  const instagram =
+  document.getElementById('instagram').value.trim();
+
+  try{
+
+    const response = await fetch(API_URL,{
+
+      method:'POST',
+
+      body:JSON.stringify({
+
+        action:'registrarParticipante',
+
+        nombres,
+        apellidos,
+        cedula,
+        celular,
+        instagram
+
+      })
+
+    });
+
+    const result = await response.json();
+
+    if(!result.ok){
+
+      mostrarToast(result.message);
+
+      return;
+
+    }
+
+    localStorage.setItem(
+      'participante',
+      JSON.stringify({
+
+        id:result.idParticipante,
+
+        nombres,
+        apellidos,
+        cedula,
+        celular,
+        instagram
+
+      })
+    );
+
+    mostrarParticipante();
+
+    mostrarToast('Registro exitoso');
+
+    document
+    .getElementById('partidos')
+    .scrollIntoView({
+      behavior:'smooth'
+    });
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    mostrarToast('Error registrando participante');
+
+  }
+
+});
+
+/* =========================
+MOSTRAR PARTICIPANTE
+========================= */
+
+function mostrarParticipante(){
+
+  const participante =
+  JSON.parse(
+    localStorage.getItem('participante')
+  );
+
+  if(!participante){
+
+    participanteActivo.innerHTML = `
+      No existe participante registrado.
+    `;
+
+    return;
+
+  }
+
+  participanteActivo.innerHTML = `
+
+    <div class="ranking-card">
+
+      <div class="ranking-left">
+
+        <div class="position">
+          ✓
+        </div>
+
+        <div>
+
+          <h3>
+            ${participante.nombres}
+            ${participante.apellidos}
+          </h3>
+
+          <p>
+            ${participante.cedula}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="points">
+        ACTIVO
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+/* =========================
+PARTIDOS
+========================= */
 
 async function cargarPartidos(){
 
@@ -46,18 +223,6 @@ function renderizarPartidos(partidos){
 
   listaPartidos.innerHTML = '';
 
-  if(partidos.length === 0){
-
-    listaPartidos.innerHTML = `
-      <div class="empty-state">
-        No existen partidos cargados todavía.
-      </div>
-    `;
-
-    return;
-
-  }
-
   partidos.forEach(partido => {
 
     const estadoClase =
@@ -67,7 +232,11 @@ function renderizarPartidos(partidos){
       ? 'status-bloqueado'
       : 'status-finalizado';
 
-    const card = document.createElement('div');
+    const bloqueado =
+      partido.ESTADO !== 'ABIERTO';
+
+    const card =
+    document.createElement('div');
 
     card.className = 'match-card';
 
@@ -76,10 +245,14 @@ function renderizarPartidos(partidos){
       <div class="match-header">
 
         <span>
-          ${partido.FASE} · Grupo ${partido.GRUPO}
+          ${partido.FASE}
+          · Grupo ${partido.GRUPO}
         </span>
 
-        <div class="match-status ${estadoClase}">
+        <div class="
+          match-status
+          ${estadoClase}
+        ">
           ${partido.ESTADO}
         </div>
 
@@ -108,6 +281,7 @@ function renderizarPartidos(partidos){
           min="0"
           placeholder="0"
           id="local-${partido.ID_PARTIDO}"
+          ${bloqueado ? 'disabled' : ''}
         >
 
         <input
@@ -115,9 +289,17 @@ function renderizarPartidos(partidos){
           min="0"
           placeholder="0"
           id="visita-${partido.ID_PARTIDO}"
+          ${bloqueado ? 'disabled' : ''}
         >
 
-        <button onclick="guardarPronostico('${partido.ID_PARTIDO}')">
+        <button
+          onclick="
+            guardarPronostico(
+              '${partido.ID_PARTIDO}'
+            )
+          "
+          ${bloqueado ? 'disabled' : ''}
+        >
           Guardar Pronóstico
         </button>
 
@@ -131,38 +313,96 @@ function renderizarPartidos(partidos){
 
 }
 
+/* =========================
+GUARDAR PRONOSTICO
+========================= */
+
 async function guardarPronostico(idPartido){
 
-  const golesLocal =
-    document.getElementById(`local-${idPartido}`).value;
+  const participante =
+  JSON.parse(
+    localStorage.getItem('participante')
+  );
 
-  const golesVisita =
-    document.getElementById(`visita-${idPartido}`).value;
+  if(!participante){
 
-  if(golesLocal === '' || golesVisita === ''){
-
-    mostrarToast('Debes ingresar ambos marcadores');
+    mostrarToast(
+      'Debes registrarte primero'
+    );
 
     return;
 
   }
 
-  mostrarToast('Pronóstico guardado');
+  const golesLocal =
+  document.getElementById(
+    `local-${idPartido}`
+  ).value;
+
+  const golesVisita =
+  document.getElementById(
+    `visita-${idPartido}`
+  ).value;
+
+  if(
+    golesLocal === '' ||
+    golesVisita === ''
+  ){
+
+    mostrarToast(
+      'Ingresa ambos marcadores'
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const response = await fetch(API_URL,{
+
+      method:'POST',
+
+      body:JSON.stringify({
+
+        action:'guardarPronostico',
+
+        idParticipante:
+        participante.id,
+
+        idPartido,
+
+        golesA:golesLocal,
+
+        golesB:golesVisita
+
+      })
+
+    });
+
+    const result =
+    await response.json();
+
+    mostrarToast(result.message);
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    mostrarToast(
+      'Error guardando pronóstico'
+    );
+
+  }
 
 }
 
-function mostrarToast(texto){
+/* =========================
+INICIO
+========================= */
 
-  toast.innerText = texto;
-
-  toast.classList.add('show');
-
-  setTimeout(() => {
-
-    toast.classList.remove('show');
-
-  },3000);
-
-}
+mostrarParticipante();
 
 cargarPartidos();
