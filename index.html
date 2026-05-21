@@ -1,203 +1,173 @@
-<!DOCTYPE html>
-<html lang="es">
+<section class="panel" id="acceso">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="panel-title">
+    <span>ACCESO DE PARTICIPANTE</span>
+    <h3>Ingresa a tu quiniela</h3>
+  </div>
 
-  <title>Casa del Mundial 2026</title>
+  <div class="auth-tabs">
 
-  <meta name="description"
-    content="Quiniela oficial Casa del Mundial 2026 - Pronósticos, ranking, puntajes y premios.">
+    <button
+      class="filter active"
+      id="tabLogin"
+      type="button"
+    >
+      Ya estoy inscrito
+    </button>
 
-  <link rel="stylesheet" href="style.css">
-</head>
+    <button
+      class="filter"
+      id="tabRegistro"
+      type="button"
+    >
+      Registrarme
+    </button>
 
-<body>
+  </div>
 
-  <header class="hero">
+  <!-- LOGIN -->
 
-    <div class="overlay"></div>
+  <form id="loginForm">
 
-    <nav class="navbar">
+    <div class="form-group">
 
-      <div class="logo-box">
-        <span class="logo-icon">🏆</span>
+      <label>
+        Cédula / Usuario
+      </label>
 
-        <div>
-          <h1>Casa del Mundial 2026</h1>
-          <p>Quiniela Mundialista Oficial</p>
-        </div>
-      </div>
+      <input
+        type="text"
+        id="loginCedula"
+        required
+      >
 
-      <button id="btnSalir" style="display:none;">
-        Salir
-      </button>
+    </div>
 
-    </nav>
+    <div class="form-group">
 
-    <div class="hero-content">
+      <label>
+        Celular / Clave
+      </label>
 
-      <span class="badge">
-        Mundial FIFA 2026
-      </span>
+      <input
+        type="text"
+        id="loginCelular"
+        required
+      >
 
-      <h2>
-        Pronostica. Compite. Gana.
-      </h2>
+      <p class="mini-info">
 
-      <p>
-        Ingresa con tu cédula y celular si ya estás inscrito, o crea tu inscripción para participar en la quiniela oficial.
+        Tu clave es tu número celular
+        SIN el 0 inicial.
+
+        <br><br>
+
+        Ejemplo:
+        984530850
+
       </p>
 
-      <div class="hero-buttons">
-        <a href="#acceso">Ingresar</a>
-        <a href="#ranking">Ranking</a>
-      </div>
+    </div>
+
+    <div class="form-group full">
+
+      <button
+        class="submit-btn"
+        type="submit"
+      >
+
+        Ingresar a mi quiniela
+
+      </button>
 
     </div>
 
-    <div class="sponsors">
-      <span>Auspiciantes oficiales</span>
-      <div id="sponsorRotator">
-        Próximamente
-      </div>
+  </form>
+
+  <!-- REGISTRO -->
+
+  <form
+    id="registroForm"
+    style="display:none;"
+  >
+
+    <div class="form-group">
+
+      <label>Nombres</label>
+
+      <input
+        type="text"
+        id="nombres"
+        required
+      >
+
     </div>
 
-  </header>
+    <div class="form-group">
 
-  <main>
+      <label>Apellidos</label>
 
-    <section class="stats">
+      <input
+        type="text"
+        id="apellidos"
+        required
+      >
 
-      <div class="stat-card">
-        <span>Partidos</span>
-        <strong id="totalPartidos">0</strong>
-      </div>
+    </div>
 
-      <div class="stat-card">
-        <span>Ranking</span>
-        <strong id="totalRanking">0</strong>
-      </div>
+    <div class="form-group">
 
-      <div class="stat-card">
-        <span>Mis puntos</span>
-        <strong id="misPuntos">0</strong>
-      </div>
+      <label>Cédula</label>
 
-    </section>
+      <input
+        type="text"
+        id="cedula"
+        required
+      >
 
-    <section class="panel" id="acceso">
+    </div>
 
-      <div class="panel-title">
-        <span>Acceso de participante</span>
-        <h3>Ingresa a tu quiniela</h3>
-      </div>
+    <div class="form-group">
 
-      <div class="auth-tabs">
-        <button class="filter active" id="tabLogin">
-          Ya estoy inscrito
-        </button>
+      <label>Celular</label>
 
-        <button class="filter" id="tabRegistro">
-          Registrarme
-        </button>
-      </div>
+      <input
+        type="text"
+        id="celular"
+        required
+      >
 
-      <form id="loginForm">
+    </div>
 
-        <div class="form-group">
-          <label>Cédula / Usuario</label>
-          <input type="text" id="loginCedula" required>
-        </div>
+    <div class="warning-box">
 
-        <div class="form-group">
-          <label>Celular / Clave</label>
-          <input type="text" id="loginCelular" required>
-        </div>
+      ⚠️ Para participar por premios debes ingresar:
 
-        <button type="submit" class="submit-btn full">
-          Ingresar a mi quiniela
-        </button>
+      <br><br>
 
-      </form>
+      • Nombres reales<br>
+      • Número de cédula único<br>
+      • Número celular único
 
-      <form id="registroForm" style="display:none;">
+      <br><br>
 
-        <div class="form-group">
-          <label>Nombres</label>
-          <input type="text" id="nombres" required>
-        </div>
+      El sistema bloquea registros duplicados automáticamente.
 
-        <div class="form-group">
-          <label>Apellidos</label>
-          <input type="text" id="apellidos" required>
-        </div>
+    </div>
 
-        <div class="form-group">
-          <label>Cédula</label>
-          <input type="text" id="cedula" required>
-        </div>
+    <div class="form-group full">
 
-        <div class="form-group">
-          <label>Celular</label>
-          <input type="text" id="celular" required>
-        </div>
+      <button
+        class="submit-btn"
+        type="submit"
+      >
 
-        <div class="warning-box full">
-          La cédula será tu usuario y el número celular será tu clave de ingreso.
-          Estos datos son únicos y no podrán repetirse.
-        </div>
+        Registrarme
 
-        <button type="submit" class="submit-btn full">
-          Crear inscripción
-        </button>
+      </button>
 
-      </form>
+    </div>
 
-    </section>
+  </form>
 
-    <section class="panel" id="miCuenta" style="display:none;">
-
-      <div class="panel-title">
-        <span>Mi cuenta</span>
-        <h3>Participante activo</h3>
-      </div>
-
-      <div id="participanteActivo"></div>
-
-    </section>
-
-    <section class="panel" id="partidos" style="display:none;">
-
-      <div class="panel-title">
-        <span>Calendario oficial</span>
-        <h3>Fases y pronósticos</h3>
-      </div>
-
-      <div id="faseTabs" class="filters"></div>
-
-      <div id="listaPartidos"></div>
-
-    </section>
-
-    <section class="panel" id="ranking">
-
-      <div class="panel-title">
-        <span>Clasificación General</span>
-        <h3>Ranking Mundialista</h3>
-      </div>
-
-      <div id="rankingContainer"></div>
-
-    </section>
-
-  </main>
-
-  <div id="toast"></div>
-
-  <script src="script.js"></script>
-
-</body>
-
-</html>
+</section>
