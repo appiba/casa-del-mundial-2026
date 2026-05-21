@@ -1,5 +1,9 @@
 const API_URL =
-'https://script.google.com/macros/s/AKfycbyvYZa5VUVgydteQgC0HmzjtRbgCZxIlwnrI3awmggOB_FE9Wl2_ES1zPvVyu6TF2MicQ/exec';
+'https://script.google.com/macros/s/AKfycbyz-NTTpZJimKeTdaFS60jwgoFnJh0PK31BXk1_5hhZUVCyqFlkJxNGqLQV1sg9POSScA/exec';
+
+/* =========================
+ELEMENTOS
+========================= */
 
 const registroForm =
 document.getElementById('registroForm');
@@ -13,6 +17,9 @@ document.getElementById('participanteActivo');
 const toast =
 document.getElementById('toast');
 
+const totalPartidos =
+document.getElementById('totalPartidos');
+
 /* =========================
 TOAST
 ========================= */
@@ -23,7 +30,7 @@ function mostrarToast(texto){
 
   toast.classList.add('show');
 
-  setTimeout(() => {
+  setTimeout(()=>{
 
     toast.classList.remove('show');
 
@@ -35,28 +42,32 @@ function mostrarToast(texto){
 REGISTRO
 ========================= */
 
-registroForm.addEventListener('submit', async (e)=>{
+registroForm.addEventListener(
+'submit',
+async(e)=>{
 
   e.preventDefault();
 
   const nombres =
-  document.getElementById('nombres').value.trim();
+  document.getElementById('nombres')
+  .value.trim();
 
   const apellidos =
-  document.getElementById('apellidos').value.trim();
+  document.getElementById('apellidos')
+  .value.trim();
 
   const cedula =
-  document.getElementById('cedula').value.trim();
+  document.getElementById('cedula')
+  .value.trim();
 
   const celular =
-  document.getElementById('celular').value.trim();
-
-  const instagram =
-  document.getElementById('instagram').value.trim();
+  document.getElementById('celular')
+  .value.trim();
 
   try{
 
-    const response = await fetch(API_URL,{
+    const response =
+    await fetch(API_URL,{
 
       method:'POST',
 
@@ -67,14 +78,14 @@ registroForm.addEventListener('submit', async (e)=>{
         nombres,
         apellidos,
         cedula,
-        celular,
-        instagram
+        celular
 
       })
 
     });
 
-    const result = await response.json();
+    const result =
+    await response.json();
 
     if(!result.ok){
 
@@ -84,24 +95,25 @@ registroForm.addEventListener('submit', async (e)=>{
 
     }
 
+    const participante = {
+
+      codigo:result.codigo,
+
+      nombres,
+      apellidos
+
+    };
+
     localStorage.setItem(
       'participante',
-      JSON.stringify({
-
-        id:result.idParticipante,
-
-        nombres,
-        apellidos,
-        cedula,
-        celular,
-        instagram
-
-      })
+      JSON.stringify(participante)
     );
 
     mostrarParticipante();
 
-    mostrarToast('Registro exitoso');
+    mostrarToast(
+      `Código generado: ${result.codigo}`
+    );
 
     document
     .getElementById('partidos')
@@ -115,7 +127,9 @@ registroForm.addEventListener('submit', async (e)=>{
 
     console.error(error);
 
-    mostrarToast('Error registrando participante');
+    mostrarToast(
+      'Error registrando participante'
+    );
 
   }
 
@@ -135,7 +149,9 @@ function mostrarParticipante(){
   if(!participante){
 
     participanteActivo.innerHTML = `
-      No existe participante registrado.
+      <div class="empty-state">
+        No existe participante registrado.
+      </div>
     `;
 
     return;
@@ -160,7 +176,8 @@ function mostrarParticipante(){
           </h3>
 
           <p>
-            ${participante.cedula}
+            Código:
+            ${participante.codigo}
           </p>
 
         </div>
@@ -178,34 +195,45 @@ function mostrarParticipante(){
 }
 
 /* =========================
-PARTIDOS
+CARGAR PARTIDOS
 ========================= */
 
 async function cargarPartidos(){
 
   try{
 
-    const response = await fetch(API_URL,{
+    const response =
+    await fetch(API_URL,{
 
       method:'POST',
 
       body:JSON.stringify({
+
         action:'obtenerPartidos'
+
       })
 
     });
 
-    const data = await response.json();
+    const data =
+    await response.json();
 
     if(!data.ok){
 
-      mostrarToast('Error cargando partidos');
+      mostrarToast(
+        'Error cargando partidos'
+      );
 
       return;
 
     }
 
-    renderizarPartidos(data.partidos);
+    totalPartidos.innerText =
+    data.partidos.length;
+
+    renderizarPartidos(
+      data.partidos
+    );
 
   }
 
@@ -213,32 +241,51 @@ async function cargarPartidos(){
 
     console.error(error);
 
-    mostrarToast('Error de conexión');
+    mostrarToast(
+      'Error de conexión'
+    );
 
   }
 
 }
 
+/* =========================
+RENDER PARTIDOS
+========================= */
+
 function renderizarPartidos(partidos){
 
   listaPartidos.innerHTML = '';
 
+  if(partidos.length === 0){
+
+    listaPartidos.innerHTML = `
+      <div class="empty-state">
+        No existen partidos todavía.
+      </div>
+    `;
+
+    return;
+
+  }
+
   partidos.forEach(partido => {
 
-    const estadoClase =
-      partido.ESTADO === 'ABIERTO'
-      ? 'status-abierto'
-      : partido.ESTADO === 'BLOQUEADO'
-      ? 'status-bloqueado'
-      : 'status-finalizado';
-
     const bloqueado =
-      partido.ESTADO !== 'ABIERTO';
+    partido.ESTADO !== 'ABIERTO';
+
+    const estadoClase =
+    partido.ESTADO === 'ABIERTO'
+    ? 'status-abierto'
+    : partido.ESTADO === 'BLOQUEADO'
+    ? 'status-bloqueado'
+    : 'status-finalizado';
 
     const card =
     document.createElement('div');
 
-    card.className = 'match-card';
+    card.className =
+    'match-card';
 
     card.innerHTML = `
 
@@ -261,7 +308,9 @@ function renderizarPartidos(partidos){
       <div class="match-teams">
 
         <div class="team">
-          <h4>${partido.EQUIPO_LOCAL}</h4>
+          <h4>
+            ${partido.EQUIPO_LOCAL}
+          </h4>
         </div>
 
         <div class="vs">
@@ -269,7 +318,9 @@ function renderizarPartidos(partidos){
         </div>
 
         <div class="team">
-          <h4>${partido.EQUIPO_VISITA}</h4>
+          <h4>
+            ${partido.EQUIPO_VISITA}
+          </h4>
         </div>
 
       </div>
@@ -300,7 +351,9 @@ function renderizarPartidos(partidos){
           "
           ${bloqueado ? 'disabled' : ''}
         >
-          Guardar Pronóstico
+
+          Guardar
+
         </button>
 
       </div>
@@ -317,7 +370,9 @@ function renderizarPartidos(partidos){
 GUARDAR PRONOSTICO
 ========================= */
 
-async function guardarPronostico(idPartido){
+async function guardarPronostico(
+idPartido
+){
 
   const participante =
   JSON.parse(
@@ -359,7 +414,8 @@ async function guardarPronostico(idPartido){
 
   try{
 
-    const response = await fetch(API_URL,{
+    const response =
+    await fetch(API_URL,{
 
       method:'POST',
 
@@ -367,14 +423,14 @@ async function guardarPronostico(idPartido){
 
         action:'guardarPronostico',
 
-        idParticipante:
-        participante.id,
+        codigo:
+        participante.codigo,
 
         idPartido,
 
-        golesA:golesLocal,
+        golesLocal,
 
-        golesB:golesVisita
+        golesVisita
 
       })
 
@@ -383,7 +439,9 @@ async function guardarPronostico(idPartido){
     const result =
     await response.json();
 
-    mostrarToast(result.message);
+    mostrarToast(
+      result.message
+    );
 
   }
 
