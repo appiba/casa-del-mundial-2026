@@ -1,14 +1,246 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Casa del Mundial 2026</title>
+
+  <meta name="description"
+    content="Quiniela oficial Casa del Mundial 2026 - Pronósticos, ranking, puntajes y premios.">
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <h1>Casa del Mundial 2026</h1>
+  <!-- HEADER -->
+
+  <header class="hero">
+
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+
+      <div class="logo-box">
+        <span class="logo-icon">🏆</span>
+
+        <div>
+          <h1>Casa del Mundial 2026</h1>
+          <p>Quiniela Mundialista Oficial</p>
+        </div>
+      </div>
+
+      <button id="btnActualizar">
+        Actualizar
+      </button>
+
+    </nav>
+
+    <div class="hero-content">
+
+      <span class="badge">
+        Mundial FIFA 2026
+      </span>
+
+      <h2>
+        Pronostica. Compite. Gana.
+      </h2>
+
+      <p>
+        Participa en la quiniela oficial de la Casa del Mundial 2026 y acumula puntos con tus pronósticos.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a href="#registro">
+          Participar
+        </a>
+
+        <a href="#ranking">
+          Ranking
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- SPONSORS -->
+
+    <div class="sponsors">
+
+      <span>Auspiciantes oficiales</span>
+
+      <div id="sponsorRotator">
+        Próximamente
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+
+  <main>
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <span>Partidos</span>
+        <strong id="totalPartidos">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Ranking</span>
+        <strong id="totalRanking">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Mis puntos</span>
+        <strong id="misPuntos">0</strong>
+      </div>
+
+    </section>
+
+    <!-- REGISTRO -->
+
+    <section class="panel" id="registro">
+
+      <div class="panel-title">
+        <span>Registro Oficial</span>
+        <h3>Participante</h3>
+      </div>
+
+      <form id="registroForm">
+
+        <div class="form-group">
+          <label>Nombres</label>
+          <input type="text" id="nombres" required>
+        </div>
+
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input type="text" id="apellidos" required>
+        </div>
+
+        <div class="form-group">
+          <label>Cédula</label>
+          <input type="text" id="cedula" required>
+        </div>
+
+        <div class="form-group">
+          <label>Celular</label>
+          <input type="text" id="celular" required>
+        </div>
+
+        <div class="form-group full">
+          <label>Instagram</label>
+          <input type="text" id="instagram">
+        </div>
+
+        <div class="warning-box">
+
+          ⚠️ Para participar por premios debes ingresar:
+          <br><br>
+
+          • Nombres reales
+          <br>
+          • Número de cédula único
+          <br>
+          • Número celular único
+
+          <br><br>
+
+          El sistema bloquea registros duplicados automáticamente.
+
+        </div>
+
+        <button type="submit" class="submit-btn">
+          Registrarme
+        </button>
+
+      </form>
+
+    </section>
+
+    <!-- PARTICIPANTE -->
+
+    <section class="panel">
+
+      <div class="panel-title">
+        <span>Mi cuenta</span>
+        <h3>Participante activo</h3>
+      </div>
+
+      <div id="participanteActivo" class="empty-state">
+
+        No existe participante registrado todavía en este dispositivo.
+
+      </div>
+
+    </section>
+
+    <!-- PARTIDOS -->
+
+    <section class="panel">
+
+      <div class="panel-title">
+        <span>Calendario</span>
+        <h3>Partidos y Pronósticos</h3>
+      </div>
+
+      <div class="filters">
+
+        <button class="filter active" data-filter="TODOS">
+          Todos
+        </button>
+
+        <button class="filter" data-filter="ABIERTO">
+          Abiertos
+        </button>
+
+        <button class="filter" data-filter="BLOQUEADO">
+          Bloqueados
+        </button>
+
+        <button class="filter" data-filter="FINALIZADO">
+          Finalizados
+        </button>
+
+      </div>
+
+      <div id="listaPartidos">
+
+      </div>
+
+    </section>
+
+    <!-- RANKING -->
+
+    <section class="panel" id="ranking">
+
+      <div class="panel-title">
+        <span>Clasificación General</span>
+        <h3>Ranking Mundialista</h3>
+      </div>
+
+      <div id="rankingContainer">
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- TOAST -->
+
+  <div id="toast"></div>
 
   <script src="script.js"></script>
 
 </body>
+
 </html>
