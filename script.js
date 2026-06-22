@@ -1,5 +1,9 @@
+const userProfile = {
+  name: "Pato",
+  assistantName: "Macro"
+};
+
 const views = document.querySelectorAll(".view");
-const navTriggers = document.querySelectorAll("[data-go]");
 const navButtons = document.querySelectorAll(".bottom-nav .nav-btn");
 
 const chatMessages = document.getElementById("chatMessages");
@@ -18,6 +22,14 @@ const aiPrompt = document.getElementById("aiPrompt");
 const aiSearchBtn = document.getElementById("aiSearchBtn");
 const aiResult = document.getElementById("aiResult");
 
+const openVoiceBtn = document.getElementById("openVoiceBtn");
+const voiceAssistant = document.getElementById("voiceAssistant");
+const voiceStartBtn = document.getElementById("voiceStartBtn");
+const voiceCloseBtn = document.getElementById("voiceCloseBtn");
+const voiceStatus = document.getElementById("voiceStatus");
+const voiceText = document.getElementById("voiceText");
+const voiceOrb = document.getElementById("voiceOrb");
+
 const chatData = {
   laguna: {
     name: "Laguna Mall",
@@ -25,18 +37,9 @@ const chatData = {
     avatar: "LM",
     avatarRed: true,
     messages: [
-      {
-        type: "received",
-        text: "Hola, estamos abiertos a revisar propuestas de activaciones comerciales."
-      },
-      {
-        type: "sent",
-        text: "Perfecto. Puedo enviar una propuesta de alianza con producción de contenido y difusión."
-      },
-      {
-        type: "received",
-        text: "Envíanos valores, beneficios y qué recibiría el centro comercial."
-      }
+      { type: "received", text: "Hola, estamos abiertos a revisar propuestas de activaciones comerciales." },
+      { type: "sent", text: "Perfecto. Puedo enviar una propuesta de alianza con producción de contenido y difusión." },
+      { type: "received", text: "Envíanos valores, beneficios y qué recibiría el centro comercial." }
     ]
   },
   capital: {
@@ -45,18 +48,9 @@ const chatData = {
     avatar: "AC",
     avatarRed: false,
     messages: [
-      {
-        type: "received",
-        text: "Nos interesa conocer el modelo financiero del proyecto."
-      },
-      {
-        type: "sent",
-        text: "Tenemos proyección de ingresos, costos operativos y estrategia de recuperación."
-      },
-      {
-        type: "received",
-        text: "Perfecto. Envíanos ticket de inversión y retorno estimado."
-      }
+      { type: "received", text: "Nos interesa conocer el modelo financiero del proyecto." },
+      { type: "sent", text: "Tenemos proyección de ingresos, costos operativos y estrategia de recuperación." },
+      { type: "received", text: "Perfecto. Envíanos ticket de inversión y retorno estimado." }
     ]
   },
   media: {
@@ -65,52 +59,32 @@ const chatData = {
     avatar: "EM",
     avatarRed: false,
     messages: [
-      {
-        type: "received",
-        text: "La radio comercial puede funcionar como canje estratégico."
-      },
-      {
-        type: "sent",
-        text: "Sí, podemos integrar circuito cerrado de radio, cuñas y programación personalizada."
-      },
-      {
-        type: "received",
-        text: "Armemos una propuesta formal para presentarla."
-      }
+      { type: "received", text: "La radio comercial puede funcionar como canje estratégico." },
+      { type: "sent", text: "Sí, podemos integrar circuito cerrado de radio, cuñas y programación personalizada." },
+      { type: "received", text: "Armemos una propuesta formal para presentarla." }
     ]
   }
 };
 
 function showView(viewId) {
-  views.forEach((view) => {
-    view.classList.remove("active");
-  });
+  views.forEach((view) => view.classList.remove("active"));
 
   const targetView = document.getElementById(viewId);
-
-  if (targetView) {
-    targetView.classList.add("active");
-  }
+  if (targetView) targetView.classList.add("active");
 
   navButtons.forEach((button) => {
     button.classList.remove("active");
-
-    if (button.dataset.go === viewId) {
-      button.classList.add("active");
-    }
+    if (button.dataset.go === viewId) button.classList.add("active");
   });
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 
   if (viewId === "messagesView") {
     setTimeout(scrollChatBottom, 100);
   }
 }
 
-function refreshNavigationEvents() {
+function bindNavigation() {
   document.querySelectorAll("[data-go]").forEach((trigger) => {
     trigger.addEventListener("click", () => {
       const viewId = trigger.dataset.go;
@@ -133,7 +107,6 @@ function createMessage(text, type = "sent") {
 
 function sendMessage() {
   const text = messageInput.value.trim();
-
   if (!text) return;
 
   chatMessages.appendChild(createMessage(text, "sent"));
@@ -148,9 +121,9 @@ function sendMessage() {
 }
 
 function getBusinessReply(text) {
-  const message = text.toLowerCase();
+  const message = normalizeText(text);
 
-  if (message.includes("inversión") || message.includes("inversion") || message.includes("capital")) {
+  if (message.includes("inversion") || message.includes("capital")) {
     return "Podemos revisar el monto de inversión, retorno esperado, riesgos y proyección mensual.";
   }
 
@@ -166,7 +139,7 @@ function getBusinessReply(text) {
     return "Envíanos una propuesta breve con objetivo, beneficios, costos y próximos pasos.";
   }
 
-  return "Entendido. Podemos analizar esta oportunidad y definir si conviene como inversión, venta o alianza estratégica.";
+  return "Entendido. Podemos analizar esta oportunidad como inversión, venta o alianza estratégica.";
 }
 
 function scrollChatBottom() {
@@ -175,7 +148,6 @@ function scrollChatBottom() {
 
 function loadChat(chatKey) {
   const data = chatData[chatKey];
-
   if (!data) return;
 
   chatName.textContent = data.name;
@@ -201,98 +173,131 @@ contactCards.forEach((card) => {
   card.addEventListener("click", () => {
     contactCards.forEach((item) => item.classList.remove("active-contact"));
     card.classList.add("active-contact");
-
-    const chatKey = card.dataset.chat;
-    loadChat(chatKey);
+    loadChat(card.dataset.chat);
   });
 });
 
 sendBtn.addEventListener("click", sendMessage);
 
 messageInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
+  if (event.key === "Enter") sendMessage();
 });
 
 directorySearch.addEventListener("input", () => {
-  const query = directorySearch.value.toLowerCase().trim();
+  const query = normalizeText(directorySearch.value.trim());
 
   directoryCards.forEach((card) => {
-    const title = card.querySelector("h3").textContent.toLowerCase();
-    const text = card.querySelector("p").textContent.toLowerCase();
-    const keywords = card.dataset.keywords.toLowerCase();
+    const title = normalizeText(card.querySelector("h3").textContent);
+    const text = normalizeText(card.querySelector("p").textContent);
+    const keywords = normalizeText(card.dataset.keywords || "");
 
-    const match =
-      title.includes(query) ||
-      text.includes(query) ||
-      keywords.includes(query);
-
+    const match = title.includes(query) || text.includes(query) || keywords.includes(query);
     card.style.display = match ? "flex" : "none";
   });
 });
 
 aiSearchBtn.addEventListener("click", () => {
-  const prompt = aiPrompt.value.toLowerCase().trim();
+  const prompt = normalizeText(aiPrompt.value.trim());
 
   if (!prompt) {
     aiResult.textContent = "Escribe qué tipo de oportunidad buscas: inversionista, alianza, comprador, venta o proyecto.";
+    speak("Escribe qué tipo de oportunidad buscas.");
     return;
   }
 
-  if (prompt.includes("inversionista") || prompt.includes("inversión") || prompt.includes("capital")) {
-    aiResult.textContent =
-      "Sugerencia IA: conecta con Andes Capital Group. Prepara monto requerido, retorno estimado, utilidad mensual y plan de salida para el inversionista.";
+  if (prompt.includes("inversionista") || prompt.includes("inversion") || prompt.includes("capital")) {
+    const response = "Sugerencia IA: conecta con Andes Capital Group. Prepara monto requerido, retorno estimado, utilidad mensual y plan de salida para el inversionista.";
+    aiResult.textContent = response;
+    speak(response);
     return;
   }
 
   if (prompt.includes("alianza") || prompt.includes("canje") || prompt.includes("centro comercial")) {
-    aiResult.textContent =
-      "Sugerencia IA: conecta con Laguna Mall. Presenta beneficios concretos: tráfico, contenido, activación, difusión y valor comercial del canje.";
+    const response = "Sugerencia IA: conecta con Laguna Mall. Presenta beneficios concretos: tráfico, contenido, activación, difusión y valor comercial del canje.";
+    aiResult.textContent = response;
+    speak(response);
     return;
   }
 
   if (prompt.includes("venta") || prompt.includes("clientes") || prompt.includes("comercial")) {
-    aiResult.textContent =
-      "Sugerencia IA: busca perfiles de ventas, medios y negocios locales. Crea una oferta clara con precio, entregables y resultados esperados.";
+    const response = "Sugerencia IA: busca perfiles de ventas, medios y negocios locales. Crea una oferta clara con precio, entregables y resultados esperados.";
+    aiResult.textContent = response;
+    speak(response);
     return;
   }
 
-  if (prompt.includes("radio") || prompt.includes("publicidad") || prompt.includes("medios")) {
-    aiResult.textContent =
-      "Sugerencia IA: presenta la radio como canal corporativo. El mejor enfoque es vender circuito cerrado, cuñas, programación y presencia de marca.";
-    return;
-  }
-
-  aiResult.textContent =
-    "Sugerencia IA: esta oportunidad puede trabajarse como proyecto estratégico. Define objetivo, inversión necesaria, aliados ideales y beneficio para cada parte.";
+  const response = "Sugerencia IA: define objetivo, inversión necesaria, aliados ideales y beneficio para cada parte.";
+  aiResult.textContent = response;
+  speak(response);
 });
 
-refreshNavigationEvents();
-loadChat("laguna");
-showView("feedView");
-/* =========================
-   ASISTENTE DE VOZ INTERNO
-========================= */
+/* VOZ */
 
-const openVoiceBtn = document.getElementById("openVoiceBtn");
-const voiceAssistant = document.getElementById("voiceAssistant");
-const voiceStartBtn = document.getElementById("voiceStartBtn");
-const voiceCloseBtn = document.getElementById("voiceCloseBtn");
-const voiceStatus = document.getElementById("voiceStatus");
-const voiceText = document.getElementById("voiceText");
-const voiceOrb = document.getElementById("voiceOrb");
-
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let recognition = null;
 let isListening = false;
+let assistantIsAwake = false;
 
-if (SpeechRecognition) {
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getBestVoice() {
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+
+  return (
+    voices.find((voice) => voice.lang === "es-EC") ||
+    voices.find((voice) => voice.lang === "es-ES") ||
+    voices.find((voice) => voice.lang.startsWith("es")) ||
+    voices[0] ||
+    null
+  );
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) {
+    voiceStatus.textContent = "Voz no disponible";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-EC";
+  utterance.rate = 0.92;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  const selectedVoice = getBestVoice();
+  if (selectedVoice) utterance.voice = selectedVoice;
+
+  utterance.onstart = () => {
+    if (voiceStatus) voiceStatus.textContent = "Hablando";
+  };
+
+  utterance.onend = () => {
+    if (voiceAssistant.classList.contains("active")) {
+      voiceStatus.textContent = "Puedes hablar";
+    }
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function setupRecognition() {
+  if (!SpeechRecognition) {
+    voiceStatus.textContent = "Micrófono no compatible";
+    voiceText.textContent = "Tu navegador no soporta reconocimiento de voz. Igual puedo hablar, pero no escuchar comandos.";
+    return;
+  }
+
   recognition = new SpeechRecognition();
   recognition.lang = "es-EC";
-  recognition.continuous = false;
+  recognition.continuous = true;
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
@@ -300,14 +305,16 @@ if (SpeechRecognition) {
     isListening = true;
     voiceOrb.classList.add("listening");
     voiceStatus.textContent = "Escuchando";
-    voiceText.textContent = "Te escucho...";
+    voiceText.textContent = `Di: Hola ${userProfile.assistantName}`;
     voiceStartBtn.textContent = "Escuchando";
   };
 
   recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
+    const lastResult = event.results[event.results.length - 1];
+    const transcript = lastResult[0].transcript.trim();
+
     voiceText.textContent = transcript;
-    handleVoiceCommand(transcript);
+    processVoiceInput(transcript);
   };
 
   recognition.onerror = () => {
@@ -318,22 +325,37 @@ if (SpeechRecognition) {
 
   recognition.onend = () => {
     stopVoiceAnimation();
+
+    if (voiceAssistant.classList.contains("active")) {
+      setTimeout(() => {
+        try {
+          recognition.start();
+        } catch (error) {}
+      }, 700);
+    }
   };
-} else {
-  voiceStatus.textContent = "No compatible";
-  voiceText.textContent =
-    "Este navegador no permite reconocimiento de voz. Prueba en Chrome o Safari actualizado.";
 }
 
 function openVoiceAssistant() {
   voiceAssistant.classList.add("active");
+  assistantIsAwake = false;
+
+  voiceStatus.textContent = "Asistente listo";
+  voiceText.textContent = `Di: Hola ${userProfile.assistantName}`;
+
+  speak(`Hola ${userProfile.name}. Soy ${userProfile.assistantName}. Toca hablar y dime: Hola ${userProfile.assistantName}.`);
 }
 
 function closeVoiceAssistant() {
   voiceAssistant.classList.remove("active");
+  assistantIsAwake = false;
 
   if (recognition && isListening) {
     recognition.stop();
+  }
+
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
   }
 
   stopVoiceAnimation();
@@ -341,9 +363,9 @@ function closeVoiceAssistant() {
 
 function startVoiceAssistant() {
   if (!recognition) {
-    voiceStatus.textContent = "No compatible";
-    voiceText.textContent =
-      "Este navegador no soporta reconocimiento de voz en la web.";
+    voiceStatus.textContent = "Micrófono no compatible";
+    voiceText.textContent = "No puedo escuchar en este navegador, pero sí puedo responder con voz si el audio está activo.";
+    speak("No puedo escuchar en este navegador, pero sí puedo responder con voz si el audio está activo.");
     return;
   }
 
@@ -360,100 +382,80 @@ function stopVoiceAnimation() {
   voiceStartBtn.textContent = "Hablar";
 }
 
-function speak(text) {
-  if (!window.speechSynthesis) return;
+function processVoiceInput(command) {
+  const text = normalizeText(command);
+  const assistantName = normalizeText(userProfile.assistantName);
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "es-EC";
-  utterance.rate = 0.95;
-  utterance.pitch = 1;
+  const wakePhrases = [
+    `hola ${assistantName}`,
+    `oye ${assistantName}`,
+    `hey ${assistantName}`,
+    assistantName
+  ];
 
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  const saidWakePhrase = wakePhrases.some((phrase) => text.includes(phrase));
+
+  if (saidWakePhrase && !assistantIsAwake) {
+    assistantIsAwake = true;
+
+    const response = `Hola ${userProfile.name}, soy ${userProfile.assistantName}. ¿Qué oportunidad de negocio quieres buscar hoy?`;
+
+    voiceStatus.textContent = "Activado";
+    voiceText.textContent = response;
+    speak(response);
+    return;
+  }
+
+  if (!assistantIsAwake) {
+    voiceStatus.textContent = "Esperando comando";
+    voiceText.textContent = `Primero di: Hola ${userProfile.assistantName}`;
+    return;
+  }
+
+  handleVoiceCommand(text);
 }
 
-function handleVoiceCommand(command) {
-  const text = command.toLowerCase();
-
+function handleVoiceCommand(text) {
   let response = "";
 
-  if (
-    text.includes("inversionista") ||
-    text.includes("inversión") ||
-    text.includes("capital")
-  ) {
-    response =
-      "Te muestro oportunidades de inversión y perfiles de capital privado.";
+  if (text.includes("inversionista") || text.includes("inversion") || text.includes("capital")) {
+    response = `Listo ${userProfile.name}, te muestro oportunidades de inversión y perfiles de capital privado.`;
     showView("directoryView");
     directorySearch.value = "inversionista capital";
     directorySearch.dispatchEvent(new Event("input"));
-  } else if (
-    text.includes("alianza") ||
-    text.includes("aliado") ||
-    text.includes("canje")
-  ) {
-    response =
-      "Te muestro posibles alianzas estratégicas y opciones de canje comercial.";
+  } else if (text.includes("alianza") || text.includes("aliado") || text.includes("canje")) {
+    response = `Perfecto ${userProfile.name}, te muestro posibles alianzas estratégicas y opciones de canje comercial.`;
     showView("directoryView");
     directorySearch.value = "alianza centro comercial";
     directorySearch.dispatchEvent(new Event("input"));
-  } else if (
-    text.includes("venta") ||
-    text.includes("vender") ||
-    text.includes("clientes") ||
-    text.includes("comprador")
-  ) {
-    response =
-      "Te muestro opciones enfocadas en ventas, clientes y compradores.";
+  } else if (text.includes("venta") || text.includes("vender") || text.includes("clientes") || text.includes("comprador")) {
+    response = `Entendido ${userProfile.name}, te muestro opciones enfocadas en ventas, clientes y compradores.`;
     showView("directoryView");
     directorySearch.value = "ventas clientes marketing";
     directorySearch.dispatchEvent(new Event("input"));
-  } else if (
-    text.includes("chat") ||
-    text.includes("mensaje") ||
-    text.includes("contactar")
-  ) {
-    response =
-      "Abriendo el chat de negocios para contactar posibles aliados.";
+  } else if (text.includes("chat") || text.includes("mensaje") || text.includes("contactar")) {
+    response = `Abriendo el chat de negocios, ${userProfile.name}.`;
     showView("messagesView");
-  } else if (
-    text.includes("perfil") ||
-    text.includes("portafolio") ||
-    text.includes("profesional")
-  ) {
-    response =
-      "Abriendo el perfil profesional con portafolio y experiencia.";
+  } else if (text.includes("perfil") || text.includes("portafolio") || text.includes("profesional")) {
+    response = `Abriendo tu perfil profesional, ${userProfile.name}.`;
     showView("profileView");
-  } else if (
-    text.includes("inicio") ||
-    text.includes("feed") ||
-    text.includes("networking")
-  ) {
-    response =
-      "Volviendo al feed principal de networking empresarial.";
+  } else if (text.includes("inicio") || text.includes("feed") || text.includes("networking")) {
+    response = `Volviendo al feed principal de networking empresarial, ${userProfile.name}.`;
     showView("feedView");
-  } else if (
-    text.includes("radio") ||
-    text.includes("publicidad") ||
-    text.includes("medios")
-  ) {
-    response =
-      "Te muestro oportunidades relacionadas con radio, publicidad y medios.";
+  } else if (text.includes("radio") || text.includes("publicidad") || text.includes("medios")) {
+    response = "Te muestro oportunidades relacionadas con radio, publicidad y medios.";
     showView("directoryView");
     directorySearch.value = "radio publicidad medios";
     directorySearch.dispatchEvent(new Event("input"));
+  } else if (text.includes("ayuda") || text.includes("comandos") || text.includes("que puedes hacer")) {
+    response = "Puedo buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, abrir el chat, abrir el perfil o volver al inicio.";
   } else {
-    response =
-      "Puedo ayudarte a buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, chat o perfiles profesionales.";
+    response = `${userProfile.name}, puedo ayudarte a buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, chat o perfiles profesionales.`;
   }
 
   voiceStatus.textContent = "Respuesta IA";
   voiceText.textContent = response;
   speak(response);
-
-  setTimeout(() => {
-    closeVoiceAssistant();
-  }, 2600);
 }
 
 openVoiceBtn.addEventListener("click", openVoiceAssistant);
@@ -461,7 +463,16 @@ voiceStartBtn.addEventListener("click", startVoiceAssistant);
 voiceCloseBtn.addEventListener("click", closeVoiceAssistant);
 
 voiceAssistant.addEventListener("click", (event) => {
-  if (event.target === voiceAssistant) {
-    closeVoiceAssistant();
-  }
+  if (event.target === voiceAssistant) closeVoiceAssistant();
 });
+
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    getBestVoice();
+  };
+}
+
+bindNavigation();
+setupRecognition();
+loadChat("laguna");
+showView("feedView");
