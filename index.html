@@ -1,148 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casa del Mundial 2026</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Social de Negocios</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ENCABEZADO / HERO -->
-  <header class="hero">
-    <nav class="navbar">
-      <div class="logo-box">
-        <span class="logo-icon" aria-hidden="true">🏆</span>
-        <div>
-          <h1>Casa del Mundial 2026</h1>
-          <p>Quiniela Mundialista Oficial</p>
-        </div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">BN</div>
+      <div>
+        <h1>Business Network</h1>
+        <p>Red social para negocios locales</p>
       </div>
-      <button id="btnSalir" class="btn-secondary" style="display:none;">Salir</button>
-    </nav>
-
-    <div class="hero-content">
-      <span class="badge">Mundial FIFA 2026</span>
-      <h2>Pronostica. Compite. Gana.</h2>
-      <p>Ingresa con tu cédula y celular si ya estás inscrito, o regístrate para participar.</p>
     </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar negocios, promos o eventos..." />
+    </div>
+
+    <button class="primary-btn" onclick="openModal()">+ Publicar</button>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main>
+  <main class="layout">
 
-    <!-- TARJETAS DE ESTADÍSTICAS -->
-    <section class="stats" aria-label="Estadísticas generales">
-      <div class="stat-card">
-        <span>Partidos</span>
-        <strong id="totalPartidos">0</strong>
+    <aside class="sidebar left">
+      <div class="profile-card">
+        <div class="profile-cover"></div>
+        <div class="profile-avatar">EF</div>
+        <h2>EFE-EME Negocios</h2>
+        <p>Conecta, promociona y vende con negocios de tu ciudad.</p>
+        <button>Editar perfil</button>
       </div>
 
-      <div class="stat-card">
-        <span>Ranking</span>
-        <strong id="totalRanking">0</strong>
+      <div class="menu-card">
+        <h3>Menú</h3>
+        <a href="#">Inicio</a>
+        <a href="#">Negocios</a>
+        <a href="#">Promociones</a>
+        <a href="#">Eventos</a>
+        <a href="#">Mensajes</a>
+        <a href="#">Marketplace</a>
+      </div>
+    </aside>
+
+    <section class="feed">
+
+      <div class="composer">
+        <div class="mini-avatar">EF</div>
+        <button onclick="openModal()">¿Qué quieres publicar para tu negocio?</button>
       </div>
 
-      <div class="stat-card">
-        <span>Mis puntos</span>
-        <strong id="misPuntos">0</strong>
+      <div class="stories">
+        <div class="story">
+          <span>🍔</span>
+          <p>Restaurantes</p>
+        </div>
+        <div class="story">
+          <span>🎧</span>
+          <p>Radio</p>
+        </div>
+        <div class="story">
+          <span>📸</span>
+          <p>Fotografía</p>
+        </div>
+        <div class="story">
+          <span>🏪</span>
+          <p>Locales</p>
+        </div>
+        <div class="story">
+          <span>🎉</span>
+          <p>Eventos</p>
+        </div>
       </div>
+
+      <div id="postsContainer"></div>
+
     </section>
 
-    <!-- MÓDULO DE ACCESO / REGISTRO -->
-    <section class="panel" id="acceso">
-      <div class="panel-title">
-        <span>ACCESO DE PARTICIPANTE</span>
-        <h3>Ingresa a tu quiniela</h3>
+    <aside class="sidebar right">
+      <div class="panel">
+        <h3>Negocios destacados</h3>
+
+        <div class="business-item">
+          <div class="business-icon">LM</div>
+          <div>
+            <strong>Laguna Mall</strong>
+            <p>Centro comercial</p>
+          </div>
+        </div>
+
+        <div class="business-item">
+          <div class="business-icon">PL</div>
+          <div>
+            <strong>PhotoLab</strong>
+            <p>Estudio fotográfico</p>
+          </div>
+        </div>
+
+        <div class="business-item">
+          <div class="business-icon">CF</div>
+          <div>
+            <strong>Céline</strong>
+            <p>Bar Karaoke</p>
+          </div>
+        </div>
       </div>
 
-      <div class="auth-tabs">
-        <button class="filter active" id="tabLogin" type="button">Ya estoy inscrito</button>
-        <button class="filter" id="tabRegistro" type="button">Registrarme</button>
+      <div class="panel">
+        <h3>Eventos cercanos</h3>
+        <div class="event-box">
+          <span>🏆</span>
+          <div>
+            <strong>Casa del Mundial</strong>
+            <p>Promociones, pantallas y activaciones.</p>
+          </div>
+        </div>
+
+        <div class="event-box">
+          <span>🎤</span>
+          <div>
+            <strong>Noche de negocios</strong>
+            <p>Networking entre marcas locales.</p>
+          </div>
+        </div>
       </div>
-
-      <!-- Formulario de Login -->
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="loginCedula">Cédula / Usuario</label>
-          <input type="tel" id="loginCedula" placeholder="Ej: 100XXXXXX" required>
-        </div>
-
-        <div class="form-group">
-          <label for="loginCelular">Celular / Clave</label>
-          <input type="password" id="loginCelular" placeholder="Contraseña (Celular sin el 0)" required>
-          <p class="mini-info">Tu clave es tu celular SIN el 0 inicial. Ejemplo: 984530850</p>
-        </div>
-
-        <button class="submit-btn full" type="submit">Ingresar a mi quiniela</button>
-      </form>
-
-      <!-- Formulario de Registro -->
-      <form id="registroForm" style="display:none;">
-        <div class="form-group">
-          <label for="nombres">Nombres</label>
-          <input type="text" id="nombres" placeholder="Ingresa tus nombres completos" required>
-        </div>
-
-        <div class="form-group">
-          <label for="apellidos">Apellidos</label>
-          <input type="text" id="apellidos" placeholder="Ingresa tus apellidos completos" required>
-        </div>
-
-        <div class="form-group">
-          <label for="cedula">Cédula</label>
-          <input type="tel" id="cedula" placeholder="Ej: 1004321890" required>
-        </div>
-
-        <div class="form-group">
-          <label for="celular">Celular</label>
-          <input type="tel" id="celular" placeholder="Ej: 0984530850" required>
-        </div>
-
-        <div class="warning-box full">
-          ⚠️ Para participar por premios debes ingresar nombres reales, cédula única y celular único.
-        </div>
-
-        <button class="submit-btn full" type="submit">Crear inscripción</button>
-      </form>
-    </section>
-
-    <!-- MÓDULO MI CUENTA (Oculto inicialmente) -->
-    <section class="panel" id="miCuenta" style="display:none;">
-      <div class="panel-title">
-        <span>MI CUENTA</span>
-        <h3>Participante activo</h3>
-      </div>
-      <div id="participanteActivo"></div>
-    </section>
-
-    <!-- MÓDULO PARTIDOS / PRONÓSTICOS (Oculto inicialmente) -->
-    <section class="panel" id="partidos" style="display:none;">
-      <div class="panel-title">
-        <span>CALENDARIO OFICIAL</span>
-        <h3>Fases y pronósticos</h3>
-      </div>
-
-      <div id="faseTabs" class="filters"></div>
-      <div id="listaPartidos"></div>
-    </section>
-
-    <!-- MÓDULO RANKING -->
-    <section class="panel" id="ranking">
-      <div class="panel-title">
-        <span>CLASIFICACIÓN GENERAL</span>
-        <h3>Ranking Mundialista</h3>
-      </div>
-      <div id="rankingContainer"></div>
-    </section>
+    </aside>
 
   </main>
 
-  <!-- NOTIFICACIONES TOAST -->
-  <div id="toast" role="alert" aria-live="assertive"></div>
+  <div class="modal" id="postModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nueva publicación</h2>
+        <button onclick="closeModal()">×</button>
+      </div>
 
-  <!-- CONTROLADORES SCRIPT -->
+      <input type="text" id="businessName" placeholder="Nombre del negocio" />
+      <input type="text" id="postTitle" placeholder="Título de la publicación" />
+      <textarea id="postText" placeholder="Escribe la promoción, evento o anuncio..."></textarea>
+
+      <select id="postCategory">
+        <option value="Promoción">Promoción</option>
+        <option value="Evento">Evento</option>
+        <option value="Producto">Producto</option>
+        <option value="Servicio">Servicio</option>
+        <option value="Comunicado">Comunicado</option>
+      </select>
+
+      <button class="publish-btn" onclick="createPost()">Publicar ahora</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
-
 </body>
 </html>
