@@ -271,3 +271,197 @@ aiSearchBtn.addEventListener("click", () => {
 refreshNavigationEvents();
 loadChat("laguna");
 showView("feedView");
+/* =========================
+   ASISTENTE DE VOZ INTERNO
+========================= */
+
+const openVoiceBtn = document.getElementById("openVoiceBtn");
+const voiceAssistant = document.getElementById("voiceAssistant");
+const voiceStartBtn = document.getElementById("voiceStartBtn");
+const voiceCloseBtn = document.getElementById("voiceCloseBtn");
+const voiceStatus = document.getElementById("voiceStatus");
+const voiceText = document.getElementById("voiceText");
+const voiceOrb = document.getElementById("voiceOrb");
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition = null;
+let isListening = false;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = "es-EC";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    isListening = true;
+    voiceOrb.classList.add("listening");
+    voiceStatus.textContent = "Escuchando";
+    voiceText.textContent = "Te escucho...";
+    voiceStartBtn.textContent = "Escuchando";
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    voiceText.textContent = transcript;
+    handleVoiceCommand(transcript);
+  };
+
+  recognition.onerror = () => {
+    voiceStatus.textContent = "No pude escuchar bien";
+    voiceText.textContent = "Intenta nuevamente hablando más claro.";
+    stopVoiceAnimation();
+  };
+
+  recognition.onend = () => {
+    stopVoiceAnimation();
+  };
+} else {
+  voiceStatus.textContent = "No compatible";
+  voiceText.textContent =
+    "Este navegador no permite reconocimiento de voz. Prueba en Chrome o Safari actualizado.";
+}
+
+function openVoiceAssistant() {
+  voiceAssistant.classList.add("active");
+}
+
+function closeVoiceAssistant() {
+  voiceAssistant.classList.remove("active");
+
+  if (recognition && isListening) {
+    recognition.stop();
+  }
+
+  stopVoiceAnimation();
+}
+
+function startVoiceAssistant() {
+  if (!recognition) {
+    voiceStatus.textContent = "No compatible";
+    voiceText.textContent =
+      "Este navegador no soporta reconocimiento de voz en la web.";
+    return;
+  }
+
+  try {
+    recognition.start();
+  } catch (error) {
+    voiceStatus.textContent = "Ya estoy escuchando";
+  }
+}
+
+function stopVoiceAnimation() {
+  isListening = false;
+  voiceOrb.classList.remove("listening");
+  voiceStartBtn.textContent = "Hablar";
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-EC";
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+function handleVoiceCommand(command) {
+  const text = command.toLowerCase();
+
+  let response = "";
+
+  if (
+    text.includes("inversionista") ||
+    text.includes("inversión") ||
+    text.includes("capital")
+  ) {
+    response =
+      "Te muestro oportunidades de inversión y perfiles de capital privado.";
+    showView("directoryView");
+    directorySearch.value = "inversionista capital";
+    directorySearch.dispatchEvent(new Event("input"));
+  } else if (
+    text.includes("alianza") ||
+    text.includes("aliado") ||
+    text.includes("canje")
+  ) {
+    response =
+      "Te muestro posibles alianzas estratégicas y opciones de canje comercial.";
+    showView("directoryView");
+    directorySearch.value = "alianza centro comercial";
+    directorySearch.dispatchEvent(new Event("input"));
+  } else if (
+    text.includes("venta") ||
+    text.includes("vender") ||
+    text.includes("clientes") ||
+    text.includes("comprador")
+  ) {
+    response =
+      "Te muestro opciones enfocadas en ventas, clientes y compradores.";
+    showView("directoryView");
+    directorySearch.value = "ventas clientes marketing";
+    directorySearch.dispatchEvent(new Event("input"));
+  } else if (
+    text.includes("chat") ||
+    text.includes("mensaje") ||
+    text.includes("contactar")
+  ) {
+    response =
+      "Abriendo el chat de negocios para contactar posibles aliados.";
+    showView("messagesView");
+  } else if (
+    text.includes("perfil") ||
+    text.includes("portafolio") ||
+    text.includes("profesional")
+  ) {
+    response =
+      "Abriendo el perfil profesional con portafolio y experiencia.";
+    showView("profileView");
+  } else if (
+    text.includes("inicio") ||
+    text.includes("feed") ||
+    text.includes("networking")
+  ) {
+    response =
+      "Volviendo al feed principal de networking empresarial.";
+    showView("feedView");
+  } else if (
+    text.includes("radio") ||
+    text.includes("publicidad") ||
+    text.includes("medios")
+  ) {
+    response =
+      "Te muestro oportunidades relacionadas con radio, publicidad y medios.";
+    showView("directoryView");
+    directorySearch.value = "radio publicidad medios";
+    directorySearch.dispatchEvent(new Event("input"));
+  } else {
+    response =
+      "Puedo ayudarte a buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, chat o perfiles profesionales.";
+  }
+
+  voiceStatus.textContent = "Respuesta IA";
+  voiceText.textContent = response;
+  speak(response);
+
+  setTimeout(() => {
+    closeVoiceAssistant();
+  }, 2600);
+}
+
+openVoiceBtn.addEventListener("click", openVoiceAssistant);
+voiceStartBtn.addEventListener("click", startVoiceAssistant);
+voiceCloseBtn.addEventListener("click", closeVoiceAssistant);
+
+voiceAssistant.addEventListener("click", (event) => {
+  if (event.target === voiceAssistant) {
+    closeVoiceAssistant();
+  }
+});
