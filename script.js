@@ -9,6 +9,7 @@ const sendBtn = document.getElementById("sendBtn");
 const contactCards = document.querySelectorAll(".contact-card");
 const chatName = document.getElementById("chatName");
 const chatCompany = document.getElementById("chatCompany");
+const chatAvatar = document.getElementById("chatAvatar");
 
 const directorySearch = document.getElementById("directorySearch");
 const directoryCards = document.querySelectorAll(".directory-card");
@@ -22,6 +23,7 @@ const chatData = {
     name: "Laguna Mall",
     company: "Centro comercial · Alianzas",
     avatar: "LM",
+    avatarRed: true,
     messages: [
       {
         type: "received",
@@ -41,6 +43,7 @@ const chatData = {
     name: "Andes Capital",
     company: "Fondo privado · Inversión",
     avatar: "AC",
+    avatarRed: false,
     messages: [
       {
         type: "received",
@@ -60,6 +63,7 @@ const chatData = {
     name: "EFE-EME Media",
     company: "Medios y negocios · Comercial",
     avatar: "EM",
+    avatarRed: false,
     messages: [
       {
         type: "received",
@@ -106,12 +110,14 @@ function showView(viewId) {
   }
 }
 
-navTriggers.forEach((trigger) => {
-  trigger.addEventListener("click", () => {
-    const viewId = trigger.dataset.go;
-    if (viewId) showView(viewId);
+function refreshNavigationEvents() {
+  document.querySelectorAll("[data-go]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const viewId = trigger.dataset.go;
+      if (viewId) showView(viewId);
+    });
   });
-});
+}
 
 function createMessage(text, type = "sent") {
   const row = document.createElement("div");
@@ -167,13 +173,29 @@ function scrollChatBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-sendBtn.addEventListener("click", sendMessage);
+function loadChat(chatKey) {
+  const data = chatData[chatKey];
 
-messageInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    sendMessage();
+  if (!data) return;
+
+  chatName.textContent = data.name;
+  chatCompany.textContent = data.company;
+  chatAvatar.textContent = data.avatar;
+
+  if (data.avatarRed) {
+    chatAvatar.classList.add("avatar-red");
+  } else {
+    chatAvatar.classList.remove("avatar-red");
   }
-});
+
+  chatMessages.innerHTML = "";
+
+  data.messages.forEach((message) => {
+    chatMessages.appendChild(createMessage(message.text, message.type));
+  });
+
+  scrollChatBottom();
+}
 
 contactCards.forEach((card) => {
   card.addEventListener("click", () => {
@@ -185,21 +207,13 @@ contactCards.forEach((card) => {
   });
 });
 
-function loadChat(chatKey) {
-  const data = chatData[chatKey];
+sendBtn.addEventListener("click", sendMessage);
 
-  if (!data) return;
-
-  chatName.textContent = data.name;
-  chatCompany.textContent = data.company;
-  chatMessages.innerHTML = "";
-
-  data.messages.forEach((message) => {
-    chatMessages.appendChild(createMessage(message.text, message.type));
-  });
-
-  scrollChatBottom();
-}
+messageInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
 
 directorySearch.addEventListener("input", () => {
   const query = directorySearch.value.toLowerCase().trim();
@@ -254,4 +268,6 @@ aiSearchBtn.addEventListener("click", () => {
     "Sugerencia IA: esta oportunidad puede trabajarse como proyecto estratégico. Define objetivo, inversión necesaria, aliados ideales y beneficio para cada parte.";
 });
 
+refreshNavigationEvents();
+loadChat("laguna");
 showView("feedView");
