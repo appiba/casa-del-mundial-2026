@@ -8,37 +8,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="app-shell">
-
     <div class="glow glow-red"></div>
     <div class="glow glow-dark"></div>
 
-    <!-- =========================
-         VISTA 1: FEED Y NETWORKING
-    ========================== -->
+    <!-- FEED -->
     <section class="view active" id="feedView">
-
       <header class="top-header">
         <div>
           <p class="section-label">Business AI Network</p>
           <h1>Networking</h1>
         </div>
 
-        <button class="notify-btn" aria-label="Notificaciones">
+        <button class="notify-btn">
           <span class="material-symbols-rounded">notifications</span>
           <i></i>
         </button>
@@ -54,9 +44,7 @@
           <h2>Encuentra inversionistas, alianzas, compradores y oportunidades comerciales.</h2>
         </div>
 
-        <button class="main-btn" data-go="directoryView">
-          Buscar oportunidades
-        </button>
+        <button class="main-btn" data-go="directoryView">Buscar oportunidades</button>
       </section>
 
       <section class="filter-row">
@@ -68,7 +56,6 @@
       </section>
 
       <main class="feed-list">
-
         <article class="post-card">
           <div class="post-header">
             <div class="profile">
@@ -97,52 +84,9 @@
           </div>
 
           <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
+            <button><span class="material-symbols-rounded">thumb_up</span>Recomendar</button>
             <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
-            </button>
-          </div>
-        </article>
-
-        <article class="post-card">
-          <div class="post-header">
-            <div class="profile">
-              <div class="avatar">PF</div>
-              <div>
-                <h3>PhotoLab Studio</h3>
-                <p>Fotografía comercial · Ecuador</p>
-              </div>
-            </div>
-            <span class="tag red">Ventas</span>
-          </div>
-
-          <p class="post-text">
-            Servicio de contenido visual para negocios: fotos, reels, videos promocionales, campañas de producto y material para redes sociales.
-          </p>
-
-          <div class="business-data">
-            <div>
-              <small>Oferta</small>
-              <strong>Producción visual</strong>
-            </div>
-            <div>
-              <small>Desde</small>
-              <strong>$25</strong>
-            </div>
-          </div>
-
-          <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
-            <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
+              <span class="material-symbols-rounded">forum</span>Contactar
             </button>
           </div>
         </article>
@@ -175,25 +119,17 @@
           </div>
 
           <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
+            <button><span class="material-symbols-rounded">thumb_up</span>Recomendar</button>
             <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
+              <span class="material-symbols-rounded">forum</span>Contactar
             </button>
           </div>
         </article>
-
       </main>
     </section>
 
-    <!-- =========================
-         VISTA 2: MENSAJES
-    ========================== -->
+    <!-- MENSAJES -->
     <section class="view" id="messagesView">
-
       <header class="top-header">
         <div>
           <p class="section-label">Inbox corporativo</p>
@@ -206,7 +142,6 @@
       </header>
 
       <section class="inbox-list">
-
         <button class="contact-card active-contact" data-chat="laguna">
           <div class="avatar avatar-red">LM</div>
           <div class="contact-info">
@@ -239,7 +174,6 @@
             <p>La radio comercial puede funcionar como canje...</p>
           </div>
         </button>
-
       </section>
 
       <section class="chat-panel">
@@ -251,10 +185,6 @@
               <p id="chatCompany">Centro comercial · Alianzas</p>
             </div>
           </div>
-
-          <button class="small-icon-btn">
-            <span class="material-symbols-rounded">call</span>
-          </button>
         </div>
 
         <main class="chat-area" id="chatMessages"></main>
@@ -266,14 +196,10 @@
           </button>
         </footer>
       </section>
-
     </section>
 
-    <!-- =========================
-         VISTA 3: DIRECTORIO / IA
-    ========================== -->
+    <!-- DIRECTORIO -->
     <section class="view" id="directoryView">
-
       <header class="top-header">
         <div>
           <p class="section-label">Directorio inteligente</p>
@@ -287,11 +213,7 @@
 
       <section class="search-card">
         <span class="material-symbols-rounded">manage_search</span>
-        <input
-          type="text"
-          id="directorySearch"
-          placeholder="Buscar inversionista, comprador, alianza..."
-        />
+        <input type="text" id="directorySearch" placeholder="Buscar inversionista, comprador, alianza..." />
       </section>
 
       <section class="ai-search-box">
@@ -313,7 +235,6 @@
       </section>
 
       <section class="directory-grid" id="directoryGrid">
-
         <article class="directory-card" data-keywords="inversionista capital negocios escalables fondo privado">
           <div class="directory-top">
             <div class="avatar">AC</div>
@@ -334,16 +255,6 @@
           <button data-go="profileView">Ver perfil</button>
         </article>
 
-        <article class="directory-card" data-keywords="ventas contenido marketing fotografia video redes sociales">
-          <div class="directory-top">
-            <div class="avatar">PL</div>
-            <span>Ventas</span>
-          </div>
-          <h3>PhotoLab Studio</h3>
-          <p>Producción visual para marcas, productos y negocios locales.</p>
-          <button data-go="profileView">Ver perfil</button>
-        </article>
-
         <article class="directory-card" data-keywords="radio publicidad circuito cerrado medios streaming">
           <div class="directory-top">
             <div class="avatar">FM</div>
@@ -354,15 +265,20 @@
           <button data-go="profileView">Ver perfil</button>
         </article>
 
+        <article class="directory-card" data-keywords="ventas contenido marketing fotografia video redes sociales">
+          <div class="directory-top">
+            <div class="avatar">PL</div>
+            <span>Ventas</span>
+          </div>
+          <h3>PhotoLab Studio</h3>
+          <p>Producción visual para marcas y negocios locales.</p>
+          <button data-go="profileView">Ver perfil</button>
+        </article>
       </section>
-
     </section>
 
-    <!-- =========================
-         VISTA 4: PERFIL PROFESIONAL
-    ========================== -->
+    <!-- PERFIL -->
     <section class="view" id="profileView">
-
       <header class="profile-page-header">
         <button class="profile-back-btn" data-go="feedView">
           <span class="material-symbols-rounded">arrow_back_ios_new</span>
@@ -379,15 +295,12 @@
       </header>
 
       <section class="portfolio-hero">
-
         <div class="hero-profile-content">
           <p class="profile-role">Business Developer</p>
-
-          <h1>Jackson<br>Clark</h1>
+          <h1>Pato<br>Nieto</h1>
 
           <p class="profile-description">
-            Estratega comercial especializado en inversión, alianzas corporativas,
-            desarrollo de negocios y expansión de marcas.
+            Estratega comercial enfocado en inversión, alianzas, medios, negocios y expansión de marcas.
           </p>
 
           <button class="profile-main-btn" data-go="messagesView">
@@ -410,21 +323,17 @@
             <span>Años de experiencia</span>
           </div>
         </div>
-
       </section>
 
       <section class="about-profile-section">
         <p>
-          Un perfil profesional enfocado en crear
-          <span>alianzas estratégicas</span>, conectar con
-          <span>inversionistas</span>, impulsar
-          <span>ventas corporativas</span> y transformar ideas en
-          negocios rentables.
+          Perfil enfocado en crear <span>alianzas estratégicas</span>,
+          conectar con <span>inversionistas</span>, impulsar
+          <span>ventas corporativas</span> y transformar ideas en negocios rentables.
         </p>
       </section>
 
       <section class="experience-section">
-
         <article class="experience-main-card">
           <div>
             <p>Experiencia</p>
@@ -438,15 +347,6 @@
         </article>
 
         <div class="skills-grid">
-
-          <article class="skill-card">
-            <div class="skill-icon">
-              <span class="material-symbols-rounded">dashboard_customize</span>
-            </div>
-            <h3>Diseño UI/UX</h3>
-            <p>Interfaces premium para plataformas comerciales.</p>
-          </article>
-
           <article class="skill-card">
             <div class="skill-icon">
               <span class="material-symbols-rounded">handshake</span>
@@ -471,12 +371,17 @@
             <p>Campañas comerciales para ventas y posicionamiento.</p>
           </article>
 
+          <article class="skill-card">
+            <div class="skill-icon">
+              <span class="material-symbols-rounded">business_center</span>
+            </div>
+            <h3>Negocios</h3>
+            <p>Desarrollo de oportunidades comerciales.</p>
+          </article>
         </div>
-
       </section>
 
       <section class="portfolio-projects-section">
-
         <div class="portfolio-title">
           <p>Latest Portfolio</p>
           <h2>Transformando Ideas</h2>
@@ -491,7 +396,6 @@
         </div>
 
         <div class="portfolio-grid">
-
           <article class="project-card project-large">
             <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=900&auto=format&fit=crop" alt="Proyecto empresarial" />
             <div class="project-overlay">
@@ -523,25 +427,19 @@
               <h3>Digital Strategy</h3>
             </div>
           </article>
-
         </div>
-
       </section>
-
     </section>
 
-    <!-- =========================
-         ASISTENTE DE VOZ INTERNO TIPO SIRI
-    ========================== -->
+    <!-- ASISTENTE DE VOZ -->
     <div class="voice-assistant" id="voiceAssistant">
       <div class="voice-panel">
         <div class="voice-orb" id="voiceOrb">
           <span class="material-symbols-rounded">mic</span>
         </div>
 
-        <p class="voice-status" id="voiceStatus">Toca y habla</p>
-
-        <h3 id="voiceText">Busca inversionistas, alianzas o ventas</h3>
+        <p class="voice-status" id="voiceStatus">Toca hablar</p>
+        <h3 id="voiceText">Di: Hola Macro</h3>
 
         <div class="voice-actions">
           <button id="voiceCloseBtn">Cerrar</button>
@@ -550,9 +448,7 @@
       </div>
     </div>
 
-    <!-- =========================
-         NAVEGACIÓN INFERIOR
-    ========================== -->
+    <!-- MENÚ INFERIOR -->
     <nav class="bottom-nav">
       <button class="nav-btn active" data-go="feedView">
         <span class="material-symbols-rounded">dynamic_feed</span>
@@ -578,7 +474,6 @@
         <small>Perfil</small>
       </button>
     </nav>
-
   </div>
 
   <script src="script.js"></script>
