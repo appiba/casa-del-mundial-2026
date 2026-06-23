@@ -3,20 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Business AI Network</title>
+  <title>Macro Business</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -24,558 +18,323 @@
 <body>
   <div class="app-shell">
 
-    <div class="glow glow-red"></div>
-    <div class="glow glow-dark"></div>
+    <div class="bg-glow bg-glow-one"></div>
+    <div class="bg-glow bg-glow-two"></div>
 
-    <!-- =========================
-         VISTA 1: FEED Y NETWORKING
-    ========================== -->
-    <section class="view active" id="feedView">
+    <!-- INICIO -->
+    <section class="view active" id="homeView">
 
       <header class="top-header">
         <div>
-          <p class="section-label">Business AI Network</p>
-          <h1>Networking</h1>
+          <p class="mini-label">Macro Business</p>
+          <h1>Conecta negocios</h1>
         </div>
 
-        <button class="notify-btn" aria-label="Notificaciones">
-          <span class="material-symbols-rounded">notifications</span>
-          <i></i>
+        <button class="icon-button" id="openProfileFromHeader">
+          <span class="material-symbols-rounded">person</span>
         </button>
       </header>
 
-      <section class="ai-card">
-        <div class="ai-icon">
+      <section class="hero-card">
+        <div class="hero-icon">
           <span class="material-symbols-rounded">auto_awesome</span>
         </div>
 
-        <div class="ai-card-text">
-          <p>Asistente IA de negocios</p>
-          <h2>Encuentra inversionistas, alianzas, compradores y oportunidades comerciales.</h2>
-        </div>
+        <p>Asistente de oportunidades</p>
+        <h2>Encuentra inversionistas, aliados, compradores y contactos estratégicos.</h2>
 
-        <button class="main-btn" data-go="directoryView">
-          Buscar oportunidades
+        <button class="primary-button protected-action" data-go="directoryView">
+          Explorar oportunidades
         </button>
       </section>
 
-      <section class="filter-row">
-        <button class="filter-pill active">Todos</button>
-        <button class="filter-pill">Inversionistas</button>
-        <button class="filter-pill">Alianzas</button>
-        <button class="filter-pill">Ventas</button>
-        <button class="filter-pill">Proyectos</button>
+      <section class="chip-row">
+        <button class="chip active">Todo</button>
+        <button class="chip">Inversión</button>
+        <button class="chip">Alianzas</button>
+        <button class="chip">Ventas</button>
+        <button class="chip">Servicios</button>
       </section>
 
-      <main class="feed-list">
+      <main class="card-list">
 
-        <article class="post-card">
-          <div class="post-header">
-            <div class="profile">
-              <div class="avatar avatar-red">LM</div>
+        <article class="opportunity-card">
+          <div class="card-head">
+            <div class="profile-mini">
+              <div class="avatar">IN</div>
               <div>
-                <h3>Laguna Mall</h3>
-                <p>Centro comercial · Ibarra</p>
+                <h3>Inversionista privado</h3>
+                <p>Capital para proyectos comerciales</p>
               </div>
             </div>
-            <span class="tag">Alianza</span>
+            <span class="status-tag">Inversión</span>
           </div>
 
-          <p class="post-text">
-            Buscamos marcas, productores y negocios locales para crear activaciones comerciales de fin de semana dentro del centro comercial.
+          <p class="card-text">
+            Busca proyectos con flujo comercial, propuesta clara y posibilidad de crecimiento.
           </p>
 
-          <div class="business-data">
-            <div>
-              <small>Tipo</small>
-              <strong>Activación comercial</strong>
-            </div>
+          <div class="info-grid">
             <div>
               <small>Interés</small>
-              <strong>Canje / Venta</strong>
-            </div>
-          </div>
-
-          <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
-
-            <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
-            </button>
-          </div>
-        </article>
-
-        <article class="post-card">
-          <div class="post-header">
-            <div class="profile">
-              <div class="avatar">PF</div>
-              <div>
-                <h3>PhotoLab Studio</h3>
-                <p>Fotografía comercial · Ecuador</p>
-              </div>
-            </div>
-            <span class="tag red">Ventas</span>
-          </div>
-
-          <p class="post-text">
-            Servicio de contenido visual para negocios: fotos, reels, videos promocionales, campañas de producto y material para redes sociales.
-          </p>
-
-          <div class="business-data">
-            <div>
-              <small>Oferta</small>
-              <strong>Producción visual</strong>
-            </div>
-            <div>
-              <small>Desde</small>
-              <strong>$25</strong>
-            </div>
-          </div>
-
-          <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
-
-            <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
-            </button>
-          </div>
-        </article>
-
-        <article class="post-card">
-          <div class="post-header">
-            <div class="profile">
-              <div class="avatar">AI</div>
-              <div>
-                <h3>Andes Capital Group</h3>
-                <p>Inversión privada · Quito</p>
-              </div>
-            </div>
-            <span class="tag">Inversión</span>
-          </div>
-
-          <p class="post-text">
-            Fondo privado busca proyectos comerciales con validación real, flujo de clientes y posibilidad de expansión regional.
-          </p>
-
-          <div class="business-data">
-            <div>
-              <small>Ticket</small>
-              <strong>$10K - $80K</strong>
-            </div>
-            <div>
-              <small>Busca</small>
               <strong>Negocios escalables</strong>
             </div>
+            <div>
+              <small>Contacto</small>
+              <strong>Chat temporal</strong>
+            </div>
           </div>
 
-          <div class="post-actions">
-            <button>
-              <span class="material-symbols-rounded">thumb_up</span>
-              Recomendar
-            </button>
+          <button class="secondary-button protected-action" data-go="chatView">
+            Contactar
+          </button>
+        </article>
 
-            <button class="accent-action" data-go="messagesView">
-              <span class="material-symbols-rounded">forum</span>
-              Contactar
-            </button>
+        <article class="opportunity-card">
+          <div class="card-head">
+            <div class="profile-mini">
+              <div class="avatar red">AL</div>
+              <div>
+                <h3>Alianza comercial</h3>
+                <p>Marcas y empresas</p>
+              </div>
+            </div>
+            <span class="status-tag">Alianza</span>
           </div>
+
+          <p class="card-text">
+            Empresas interesadas en colaborar, intercambiar servicios y generar nuevos clientes.
+          </p>
+
+          <div class="info-grid">
+            <div>
+              <small>Tipo</small>
+              <strong>Canje / convenio</strong>
+            </div>
+            <div>
+              <small>Objetivo</small>
+              <strong>Ventas</strong>
+            </div>
+          </div>
+
+          <button class="secondary-button protected-action" data-go="chatView">
+            Contactar
+          </button>
         </article>
 
       </main>
     </section>
 
-    <!-- =========================
-         VISTA 2: MENSAJES
-    ========================== -->
-    <section class="view" id="messagesView">
-
-      <header class="top-header">
-        <div>
-          <p class="section-label">Inbox corporativo</p>
-          <h1>Mensajes</h1>
-        </div>
-
-        <button class="notify-btn">
-          <span class="material-symbols-rounded">edit_square</span>
-        </button>
-      </header>
-
-      <section class="inbox-list">
-
-        <button class="contact-card active-contact" data-chat="laguna">
-          <div class="avatar avatar-red">LM</div>
-          <div class="contact-info">
-            <div class="contact-top">
-              <h3>Laguna Mall</h3>
-              <span>13:45</span>
-            </div>
-            <p>Podemos revisar una propuesta de alianza...</p>
-          </div>
-        </button>
-
-        <button class="contact-card" data-chat="capital">
-          <div class="avatar">AC</div>
-          <div class="contact-info">
-            <div class="contact-top">
-              <h3>Andes Capital</h3>
-              <span>12:10</span>
-            </div>
-            <p>Nos interesa conocer el modelo financiero...</p>
-          </div>
-        </button>
-
-        <button class="contact-card" data-chat="media">
-          <div class="avatar">EM</div>
-          <div class="contact-info">
-            <div class="contact-top">
-              <h3>EFE-EME Media</h3>
-              <span>Ayer</span>
-            </div>
-            <p>La radio comercial puede funcionar como canje...</p>
-          </div>
-        </button>
-
-      </section>
-
-      <section class="chat-panel">
-        <div class="chat-business-header">
-          <div class="profile">
-            <div class="avatar avatar-red" id="chatAvatar">LM</div>
-            <div>
-              <h3 id="chatName">Laguna Mall</h3>
-              <p id="chatCompany">Centro comercial · Alianzas</p>
-            </div>
-          </div>
-
-          <button class="small-icon-btn">
-            <span class="material-symbols-rounded">call</span>
-          </button>
-        </div>
-
-        <main class="chat-area" id="chatMessages"></main>
-
-        <footer class="chat-input">
-          <input type="text" id="messageInput" placeholder="Escribir mensaje de negocios..." />
-          <button id="sendBtn">
-            <span class="material-symbols-rounded">send</span>
-          </button>
-        </footer>
-      </section>
-
-    </section>
-
-    <!-- =========================
-         VISTA 3: DIRECTORIO / IA
-    ========================== -->
+    <!-- DIRECTORIO -->
     <section class="view" id="directoryView">
 
       <header class="top-header">
         <div>
-          <p class="section-label">Directorio inteligente</p>
+          <p class="mini-label">Directorio inteligente</p>
           <h1>Oportunidades</h1>
         </div>
 
-        <button class="notify-btn">
-          <span class="material-symbols-rounded">tune</span>
+        <button class="icon-button" data-go="homeView">
+          <span class="material-symbols-rounded">home</span>
         </button>
       </header>
 
-      <section class="search-card">
-        <span class="material-symbols-rounded">manage_search</span>
-        <input
-          type="text"
-          id="directorySearch"
-          placeholder="Buscar inversionista, comprador, alianza..."
-        />
+      <section class="search-box">
+        <span class="material-symbols-rounded">search</span>
+        <input id="directorySearch" type="text" placeholder="Buscar inversionista, aliado, comprador..." />
       </section>
 
-      <section class="ai-search-box">
-        <div>
-          <p>IA comercial</p>
-          <h2>Describe qué buscas y encuentra conexiones estratégicas.</h2>
-        </div>
+      <section class="ai-box">
+        <p>Macro IA</p>
+        <h2>Describe lo que buscas y la app te sugiere el tipo de contacto.</h2>
 
-        <textarea id="aiPrompt" placeholder="Ej: Busco inversionista para una radio comercial en centro comercial..."></textarea>
+        <textarea id="aiPrompt" placeholder="Ej: Busco inversionista para un negocio que ya vende..."></textarea>
 
-        <button class="main-btn" id="aiSearchBtn">
-          <span class="material-symbols-rounded">auto_awesome</span>
+        <button class="primary-button protected-action" id="aiAnalyzeBtn">
           Analizar oportunidad
         </button>
 
         <div class="ai-result" id="aiResult">
-          La IA sugerirá perfiles, alianzas o rutas de venta según tu búsqueda.
+          Aquí aparecerá la recomendación de Macro IA.
         </div>
       </section>
 
-      <section class="directory-grid" id="directoryGrid">
+      <section class="directory-grid">
 
-        <article class="directory-card" data-keywords="inversionista capital negocios escalables fondo privado">
-          <div class="directory-top">
-            <div class="avatar">AC</div>
-            <span>Inversión</span>
-          </div>
-          <h3>Andes Capital Group</h3>
-          <p>Busca negocios con flujo comercial, proyección y expansión.</p>
-          <button data-go="profileView">Ver perfil</button>
+        <article class="directory-card" data-keywords="inversionista capital dinero proyecto negocio">
+          <div class="directory-icon">IN</div>
+          <span>Inversión</span>
+          <h3>Perfil inversionista</h3>
+          <p>Personas o empresas interesadas en financiar proyectos comerciales.</p>
+          <button class="protected-action" data-go="chatView">Contactar</button>
         </article>
 
-        <article class="directory-card" data-keywords="alianza centro comercial locales activaciones laguna mall">
-          <div class="directory-top">
-            <div class="avatar avatar-red">LM</div>
-            <span>Alianza</span>
-          </div>
-          <h3>Laguna Mall</h3>
-          <p>Espacios, activaciones, promociones y alianzas comerciales.</p>
-          <button data-go="profileView">Ver perfil</button>
+        <article class="directory-card" data-keywords="alianza convenio canje empresa marca">
+          <div class="directory-icon red">AL</div>
+          <span>Alianza</span>
+          <h3>Aliado estratégico</h3>
+          <p>Empresas que buscan colaborar con otros negocios.</p>
+          <button class="protected-action" data-go="chatView">Contactar</button>
         </article>
 
-        <article class="directory-card" data-keywords="ventas contenido marketing fotografia video redes sociales">
-          <div class="directory-top">
-            <div class="avatar">PL</div>
-            <span>Ventas</span>
-          </div>
-          <h3>PhotoLab Studio</h3>
-          <p>Producción visual para marcas, productos y negocios locales.</p>
-          <button data-go="profileView">Ver perfil</button>
+        <article class="directory-card" data-keywords="comprador venta cliente proveedor comercial">
+          <div class="directory-icon">CO</div>
+          <span>Comprador</span>
+          <h3>Comprador comercial</h3>
+          <p>Contactos interesados en adquirir productos o servicios.</p>
+          <button class="protected-action" data-go="chatView">Contactar</button>
         </article>
 
-        <article class="directory-card" data-keywords="radio publicidad circuito cerrado medios streaming">
-          <div class="directory-top">
-            <div class="avatar">FM</div>
-            <span>Medios</span>
-          </div>
-          <h3>Radio Business FM</h3>
-          <p>Radio personalizada para centros comerciales y marcas.</p>
-          <button data-go="profileView">Ver perfil</button>
+        <article class="directory-card" data-keywords="servicio proveedor marketing tecnologia diseño">
+          <div class="directory-icon">SE</div>
+          <span>Servicio</span>
+          <h3>Proveedor profesional</h3>
+          <p>Servicios para empresas, marcas, negocios y emprendedores.</p>
+          <button class="protected-action" data-go="chatView">Contactar</button>
         </article>
 
       </section>
-
     </section>
 
-    <!-- =========================
-         VISTA 4: PERFIL PROFESIONAL
-    ========================== -->
-    <section class="view" id="profileView">
+    <!-- CHAT -->
+    <section class="view" id="chatView">
 
-      <header class="profile-page-header">
-        <button class="profile-back-btn" data-go="feedView">
-          <span class="material-symbols-rounded">arrow_back_ios_new</span>
-        </button>
-
+      <header class="top-header">
         <div>
-          <p>Perfil profesional</p>
-          <h2>Portfolio</h2>
+          <p class="mini-label">Chat temporal</p>
+          <h1>Conexión</h1>
         </div>
 
-        <button class="profile-menu-btn">
-          <span class="material-symbols-rounded">more_horiz</span>
+        <button class="icon-button" data-go="homeView">
+          <span class="material-symbols-rounded">close</span>
         </button>
       </header>
 
-      <section class="portfolio-hero">
+      <section class="chat-card">
 
-        <div class="hero-profile-content">
-          <p class="profile-role">Business Developer</p>
+        <div class="chat-header">
+          <div class="profile-mini">
+            <div class="avatar red">MB</div>
+            <div>
+              <h3>Contacto de negocio</h3>
+              <p>Chat activo para intercambio rápido</p>
+            </div>
+          </div>
+        </div>
 
-          <h1>Pato<br>Nieto</h1>
+        <div class="chat-warning">
+          Este chat es temporal. Comparte WhatsApp o correo para continuar la negociación fuera de la plataforma.
+        </div>
 
-          <p class="profile-description">
-            Estratega comercial especializado en inversión, alianzas corporativas,
-            desarrollo de negocios y expansión de marcas.
-          </p>
+        <div class="quick-actions">
+          <button id="sendWhatsappBtn">
+            <span class="material-symbols-rounded">call</span>
+            WhatsApp
+          </button>
 
-          <button class="profile-main-btn" data-go="messagesView">
-            Contactar
-            <span class="material-symbols-rounded">arrow_forward</span>
+          <button id="sendEmailBtn">
+            <span class="material-symbols-rounded">mail</span>
+            Correo
+          </button>
+
+          <button id="sendProfileBtn">
+            <span class="material-symbols-rounded">badge</span>
+            Perfil
           </button>
         </div>
 
-        <div class="profile-image-area">
-          <div class="profile-red-shape"></div>
-
-          <img
-            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=900&auto=format&fit=crop"
-            alt="Profesional"
-            class="professional-img"
-          />
-
-          <div class="floating-exp-card">
-            <strong>10+</strong>
-            <span>Años de experiencia</span>
+        <main class="chat-messages" id="chatMessages">
+          <div class="message-row received">
+            <div class="message">
+              Hola, cuéntame brevemente qué oportunidad de negocio tienes.
+            </div>
           </div>
-        </div>
+        </main>
+
+        <footer class="chat-input">
+          <input id="messageInput" type="text" placeholder="Escribe un mensaje..." />
+          <button id="sendMessageBtn">
+            <span class="material-symbols-rounded">send</span>
+          </button>
+        </footer>
 
       </section>
-
-      <section class="about-profile-section">
-        <p>
-          Un perfil profesional enfocado en crear
-          <span>alianzas estratégicas</span>, conectar con
-          <span>inversionistas</span>, impulsar
-          <span>ventas corporativas</span> y transformar ideas en
-          negocios rentables.
-        </p>
-      </section>
-
-      <section class="experience-section">
-
-        <article class="experience-main-card">
-          <div>
-            <p>Experiencia</p>
-            <h2>+10</h2>
-            <span>Años creando soluciones de negocio</span>
-          </div>
-
-          <div class="experience-glow-icon">
-            <span class="material-symbols-rounded">workspace_premium</span>
-          </div>
-        </article>
-
-        <div class="skills-grid">
-
-          <article class="skill-card">
-            <div class="skill-icon">
-              <span class="material-symbols-rounded">dashboard_customize</span>
-            </div>
-            <h3>Diseño UI/UX</h3>
-            <p>Interfaces premium para plataformas comerciales.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">
-              <span class="material-symbols-rounded">handshake</span>
-            </div>
-            <h3>Alianzas</h3>
-            <p>Conexiones estratégicas entre marcas y empresas.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">
-              <span class="material-symbols-rounded">trending_up</span>
-            </div>
-            <h3>Inversión</h3>
-            <p>Presentación de proyectos para levantar capital.</p>
-          </article>
-
-          <article class="skill-card">
-            <div class="skill-icon">
-              <span class="material-symbols-rounded">campaign</span>
-            </div>
-            <h3>Marketing</h3>
-            <p>Campañas comerciales para ventas y posicionamiento.</p>
-          </article>
-
-        </div>
-
-      </section>
-
-      <section class="portfolio-projects-section">
-
-        <div class="portfolio-title">
-          <p>Latest Portfolio</p>
-          <h2>Transformando Ideas</h2>
-        </div>
-
-        <div class="portfolio-filters">
-          <button class="active">Todos</button>
-          <button>Branding</button>
-          <button>Diseño</button>
-          <button>Negocios</button>
-          <button>Marketing</button>
-        </div>
-
-        <div class="portfolio-grid">
-
-          <article class="project-card project-large">
-            <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=900&auto=format&fit=crop" alt="Proyecto empresarial" />
-            <div class="project-overlay">
-              <span>Alianza Comercial</span>
-              <h3>Business Growth</h3>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=900&auto=format&fit=crop" alt="Oficina" />
-            <div class="project-overlay">
-              <span>Oficinas</span>
-              <h3>Corporate Hub</h3>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=900&auto=format&fit=crop" alt="Reunión" />
-            <div class="project-overlay">
-              <span>Inversión</span>
-              <h3>Capital Pitch</h3>
-            </div>
-          </article>
-
-          <article class="project-card project-wide">
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Equipo de trabajo" />
-            <div class="project-overlay">
-              <span>Marketing</span>
-              <h3>Digital Strategy</h3>
-            </div>
-          </article>
-
-        </div>
-
-      </section>
-
     </section>
 
-    <!-- =========================
-         ASISTENTE DE VOZ INTERNO TIPO SIRI
-    ========================== -->
-    <div class="voice-assistant" id="voiceAssistant">
-      <div class="voice-panel">
+    <!-- PERFIL -->
+    <section class="view" id="profileView">
+
+      <header class="top-header">
+        <div>
+          <p class="mini-label">Perfil profesional</p>
+          <h1>Mi perfil</h1>
+        </div>
+
+        <button class="icon-button" id="editProfileBtn">
+          <span class="material-symbols-rounded">edit</span>
+        </button>
+      </header>
+
+      <section class="profile-hero">
+        <div class="profile-photo-large" id="profilePhotoDisplay">
+          <span class="material-symbols-rounded">person</span>
+        </div>
+
+        <h2 id="profileNameDisplay">Crea tu perfil</h2>
+        <p id="profileRoleDisplay">Perfil profesional de negocios</p>
+
+        <div class="profile-info-card">
+          <strong id="profileCompanyDisplay">Empresa / Marca</strong>
+          <span id="profileCityDisplay">Ciudad / País</span>
+          <p id="profileBioDisplay">
+            Crea tu perfil para conectar con inversionistas, aliados y compradores.
+          </p>
+        </div>
+
+        <button class="primary-button" id="openProfileModalBtn">
+          Crear / editar perfil
+        </button>
+      </section>
+    </section>
+
+    <!-- ASISTENTE DE VOZ -->
+    <div class="voice-modal" id="voiceModal">
+      <div class="voice-card">
         <div class="voice-orb" id="voiceOrb">
           <span class="material-symbols-rounded">mic</span>
         </div>
 
-        <p class="voice-status" id="voiceStatus">Toca hablar</p>
-
+        <p id="voiceStatus">Asistente Macro</p>
         <h3 id="voiceText">Di: Hola Macro</h3>
 
-        <div class="voice-actions">
-          <button id="voiceCloseBtn">Cerrar</button>
-          <button id="voiceStartBtn">Hablar</button>
+        <div class="voice-buttons">
+          <button id="closeVoiceBtn">Cerrar</button>
+          <button id="startVoiceBtn">Hablar</button>
         </div>
       </div>
     </div>
 
-    <!-- =========================
-         MODAL CREAR PERFIL
-    ========================== -->
-    <div class="profile-gate-modal" id="profileGateModal">
-      <div class="profile-gate-card">
+    <!-- MODAL CREAR PERFIL -->
+    <div class="profile-modal" id="profileModal">
+      <div class="profile-modal-card">
 
-        <button class="profile-gate-close" id="profileGateClose">
+        <button class="modal-close" id="closeProfileModal">
           <span class="material-symbols-rounded">close</span>
         </button>
 
-        <div class="profile-gate-header">
-          <div class="profile-gate-icon">
+        <div class="modal-title">
+          <div class="modal-icon">
             <span class="material-symbols-rounded">person_add</span>
           </div>
 
           <p>Acceso profesional</p>
-          <h2>Crea tu perfil para conectar</h2>
+          <h2>Crea tu perfil</h2>
           <span>
-            Puedes explorar la app, pero para contactar, enviar mensajes o compartir datos debes tener un perfil profesional.
+            La app se puede explorar libremente, pero para contactar, chatear o compartir datos debes tener perfil.
           </span>
         </div>
 
-        <form class="profile-form" id="profileForm">
+        <form id="profileForm" class="profile-form">
 
           <label class="photo-upload">
             <input type="file" id="profilePhotoInput" accept="image/*" hidden />
@@ -586,73 +345,66 @@
 
             <div>
               <strong>Foto de perfil</strong>
-              <small>Solo una foto. Si subes otra, se reemplaza.</small>
+              <small>Solo una foto. Si subes otra, reemplaza la anterior.</small>
             </div>
           </label>
 
-          <div class="form-grid">
-
-            <label>
-              <span>Nombre completo</span>
-              <input type="text" id="profileNameInput" placeholder="Ej: Pato Nieto" required />
-            </label>
-
-            <label>
-              <span>Empresa o marca</span>
-              <input type="text" id="profileCompanyInput" placeholder="Ej: EFE-EME Media" required />
-            </label>
-
-            <label>
-              <span>Cargo / Actividad</span>
-              <input type="text" id="profileRoleInput" placeholder="Ej: Business Developer" required />
-            </label>
-
-            <label>
-              <span>Ciudad / País</span>
-              <input type="text" id="profileCityInput" placeholder="Ej: Ibarra, Ecuador" required />
-            </label>
-
-            <label>
-              <span>WhatsApp</span>
-              <input type="tel" id="profileWhatsappInput" placeholder="Ej: 0980510530" required />
-            </label>
-
-            <label>
-              <span>Correo</span>
-              <input type="email" id="profileEmailInput" placeholder="correo@empresa.com" required />
-            </label>
-
-          </div>
-
-          <label class="full-label">
-            <span>Descripción corta</span>
-            <textarea id="profileBioInput" placeholder="Cuenta brevemente qué haces o qué tipo de negocios buscas..." required></textarea>
+          <label>
+            <span>Nombre completo</span>
+            <input id="profileNameInput" type="text" placeholder="Ej: Edwin López" required />
           </label>
 
-          <button type="submit" class="save-profile-btn">
-            Guardar perfil profesional
+          <label>
+            <span>Empresa o marca</span>
+            <input id="profileCompanyInput" type="text" placeholder="Ej: Macro Business" required />
+          </label>
+
+          <label>
+            <span>Cargo / actividad</span>
+            <input id="profileRoleInput" type="text" placeholder="Ej: Business Developer" required />
+          </label>
+
+          <label>
+            <span>Ciudad / país</span>
+            <input id="profileCityInput" type="text" placeholder="Ej: Ibarra, Ecuador" required />
+          </label>
+
+          <label>
+            <span>WhatsApp</span>
+            <input id="profileWhatsappInput" type="tel" placeholder="Ej: 0980000000" required />
+          </label>
+
+          <label>
+            <span>Correo</span>
+            <input id="profileEmailInput" type="email" placeholder="correo@empresa.com" required />
+          </label>
+
+          <label>
+            <span>Descripción corta</span>
+            <textarea id="profileBioInput" placeholder="Describe qué haces y qué tipo de contactos buscas..." required></textarea>
+          </label>
+
+          <button class="primary-button" type="submit">
+            Guardar perfil
           </button>
 
         </form>
-
       </div>
     </div>
 
-    <!-- =========================
-         NAVEGACIÓN INFERIOR
-    ========================== -->
+    <!-- MENÚ INFERIOR -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" data-go="feedView">
-        <span class="material-symbols-rounded">dynamic_feed</span>
-        <small>Feed</small>
+      <button class="nav-btn active" data-go="homeView">
+        <span class="material-symbols-rounded">home</span>
+        <small>Inicio</small>
       </button>
 
-      <button class="nav-btn" data-go="messagesView">
+      <button class="nav-btn protected-action" data-go="chatView">
         <span class="material-symbols-rounded">forum</span>
         <small>Chat</small>
       </button>
 
-      <button class="nav-btn nav-main" id="openVoiceBtn">
+      <button class="nav-btn nav-main protected-action" id="openVoiceBtn">
         <span class="material-symbols-rounded">auto_awesome</span>
       </button>
 
