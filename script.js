@@ -1,492 +1,17 @@
-const userProfile = {
-  name: "Edwin",
+const APP_PROFILE_KEY = "macroBusinessProfile";
+
+const defaultUser = {
+  name: "Usuario",
   assistantName: "Macro"
 };
 
 const views = document.querySelectorAll(".view");
-const navButtons = document.querySelectorAll(".bottom-nav .nav-btn");
-
-const chatMessages = document.getElementById("chatMessages");
-const messageInput = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
-
-const contactCards = document.querySelectorAll(".contact-card");
-const chatName = document.getElementById("chatName");
-const chatCompany = document.getElementById("chatCompany");
-const chatAvatar = document.getElementById("chatAvatar");
-
-const directorySearch = document.getElementById("directorySearch");
-const directoryCards = document.querySelectorAll(".directory-card");
-
-const aiPrompt = document.getElementById("aiPrompt");
-const aiSearchBtn = document.getElementById("aiSearchBtn");
-const aiResult = document.getElementById("aiResult");
-
-const openVoiceBtn = document.getElementById("openVoiceBtn");
-const voiceAssistant = document.getElementById("voiceAssistant");
-const voiceStartBtn = document.getElementById("voiceStartBtn");
-const voiceCloseBtn = document.getElementById("voiceCloseBtn");
-const voiceStatus = document.getElementById("voiceStatus");
-const voiceText = document.getElementById("voiceText");
-const voiceOrb = document.getElementById("voiceOrb");
-
-const chatData = {
-  laguna: {
-    name: "Laguna Mall",
-    company: "Centro comercial · Alianzas",
-    avatar: "LM",
-    avatarRed: true,
-    messages: [
-      { type: "received", text: "Hola, estamos abiertos a revisar propuestas de activaciones comerciales." },
-      { type: "sent", text: "Perfecto. Puedo enviar una propuesta de alianza con producción de contenido y difusión." },
-      { type: "received", text: "Envíanos valores, beneficios y qué recibiría el centro comercial." }
-    ]
-  },
-  capital: {
-    name: "Andes Capital",
-    company: "Fondo privado · Inversión",
-    avatar: "AC",
-    avatarRed: false,
-    messages: [
-      { type: "received", text: "Nos interesa conocer el modelo financiero del proyecto." },
-      { type: "sent", text: "Tenemos proyección de ingresos, costos operativos y estrategia de recuperación." },
-      { type: "received", text: "Perfecto. Envíanos ticket de inversión y retorno estimado." }
-    ]
-  },
-  media: {
-    name: "EFE-EME Media",
-    company: "Medios y negocios · Comercial",
-    avatar: "EM",
-    avatarRed: false,
-    messages: [
-      { type: "received", text: "La radio comercial puede funcionar como canje estratégico." },
-      { type: "sent", text: "Sí, podemos integrar circuito cerrado de radio, cuñas y programación personalizada." },
-      { type: "received", text: "Armemos una propuesta formal para presentarla." }
-    ]
-  }
-};
-
-function showView(viewId) {
-  views.forEach((view) => view.classList.remove("active"));
-
-  const targetView = document.getElementById(viewId);
-  if (targetView) targetView.classList.add("active");
-
-  navButtons.forEach((button) => {
-    button.classList.remove("active");
-    if (button.dataset.go === viewId) button.classList.add("active");
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  if (viewId === "messagesView") {
-    setTimeout(scrollChatBottom, 100);
-  }
-}
-
-function bindNavigation() {
-  document.querySelectorAll("[data-go]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const viewId = trigger.dataset.go;
-      if (viewId) showView(viewId);
-    });
-  });
-}
-
-function createMessage(text, type = "sent") {
-  const row = document.createElement("div");
-  row.className = `message-row ${type}`;
-
-  const bubble = document.createElement("div");
-  bubble.className = "message";
-  bubble.textContent = text;
-
-  row.appendChild(bubble);
-  return row;
-}
-
-function sendMessage() {
-  const text = messageInput.value.trim();
-  if (!text) return;
-
-  chatMessages.appendChild(createMessage(text, "sent"));
-  messageInput.value = "";
-  scrollChatBottom();
-
-  setTimeout(() => {
-    const response = getBusinessReply(text);
-    chatMessages.appendChild(createMessage(response, "received"));
-    scrollChatBottom();
-  }, 650);
-}
-
-function getBusinessReply(text) {
-  const message = normalizeText(text);
-
-  if (message.includes("inversion") || message.includes("capital")) {
-    return "Podemos revisar el monto de inversión, retorno esperado, riesgos y proyección mensual.";
-  }
-
-  if (message.includes("alianza") || message.includes("canje")) {
-    return "Una alianza puede estructurarse con beneficios claros: espacio, difusión, contenido y resultados medibles.";
-  }
-
-  if (message.includes("venta") || message.includes("clientes")) {
-    return "Podemos ayudarte a conectar con compradores, clientes corporativos o canales comerciales.";
-  }
-
-  if (message.includes("propuesta")) {
-    return "Envíanos una propuesta breve con objetivo, beneficios, costos y próximos pasos.";
-  }
-
-  return "Entendido. Podemos analizar esta oportunidad como inversión, venta o alianza estratégica.";
-}
-
-function scrollChatBottom() {
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function loadChat(chatKey) {
-  const data = chatData[chatKey];
-  if (!data) return;
-
-  chatName.textContent = data.name;
-  chatCompany.textContent = data.company;
-  chatAvatar.textContent = data.avatar;
-
-  if (data.avatarRed) {
-    chatAvatar.classList.add("avatar-red");
-  } else {
-    chatAvatar.classList.remove("avatar-red");
-  }
-
-  chatMessages.innerHTML = "";
-
-  data.messages.forEach((message) => {
-    chatMessages.appendChild(createMessage(message.text, message.type));
-  });
-
-  scrollChatBottom();
-}
-
-contactCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    contactCards.forEach((item) => item.classList.remove("active-contact"));
-    card.classList.add("active-contact");
-    loadChat(card.dataset.chat);
-  });
-});
-
-sendBtn.addEventListener("click", sendMessage);
-
-messageInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") sendMessage();
-});
-
-directorySearch.addEventListener("input", () => {
-  const query = normalizeText(directorySearch.value.trim());
-
-  directoryCards.forEach((card) => {
-    const title = normalizeText(card.querySelector("h3").textContent);
-    const text = normalizeText(card.querySelector("p").textContent);
-    const keywords = normalizeText(card.dataset.keywords || "");
-
-    const match = title.includes(query) || text.includes(query) || keywords.includes(query);
-    card.style.display = match ? "flex" : "none";
-  });
-});
-
-aiSearchBtn.addEventListener("click", () => {
-  const prompt = normalizeText(aiPrompt.value.trim());
-
-  if (!prompt) {
-    aiResult.textContent = "Escribe qué tipo de oportunidad buscas: inversionista, alianza, comprador, venta o proyecto.";
-    speak("Escribe qué tipo de oportunidad buscas.");
-    return;
-  }
-
-  if (prompt.includes("inversionista") || prompt.includes("inversion") || prompt.includes("capital")) {
-    const response = "Sugerencia IA: conecta con Andes Capital Group. Prepara monto requerido, retorno estimado, utilidad mensual y plan de salida para el inversionista.";
-    aiResult.textContent = response;
-    speak(response);
-    return;
-  }
-
-  if (prompt.includes("alianza") || prompt.includes("canje") || prompt.includes("centro comercial")) {
-    const response = "Sugerencia IA: conecta con Laguna Mall. Presenta beneficios concretos: tráfico, contenido, activación, difusión y valor comercial del canje.";
-    aiResult.textContent = response;
-    speak(response);
-    return;
-  }
-
-  if (prompt.includes("venta") || prompt.includes("clientes") || prompt.includes("comercial")) {
-    const response = "Sugerencia IA: busca perfiles de ventas, medios y negocios locales. Crea una oferta clara con precio, entregables y resultados esperados.";
-    aiResult.textContent = response;
-    speak(response);
-    return;
-  }
-
-  const response = "Sugerencia IA: define objetivo, inversión necesaria, aliados ideales y beneficio para cada parte.";
-  aiResult.textContent = response;
-  speak(response);
-});
-
-/* VOZ */
-
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-let recognition = null;
-let isListening = false;
-let assistantIsAwake = false;
-
-function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
-function getBestVoice() {
-  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-
-  return (
-    voices.find((voice) => voice.lang === "es-EC") ||
-    voices.find((voice) => voice.lang === "es-ES") ||
-    voices.find((voice) => voice.lang.startsWith("es")) ||
-    voices[0] ||
-    null
-  );
-}
-
-function speak(text) {
-  if (!window.speechSynthesis) {
-    voiceStatus.textContent = "Voz no disponible";
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "es-EC";
-  utterance.rate = 0.92;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  const selectedVoice = getBestVoice();
-  if (selectedVoice) utterance.voice = selectedVoice;
-
-  utterance.onstart = () => {
-    if (voiceStatus) voiceStatus.textContent = "Hablando";
-  };
-
-  utterance.onend = () => {
-    if (voiceAssistant.classList.contains("active")) {
-      voiceStatus.textContent = "Puedes hablar";
-    }
-  };
-
-  window.speechSynthesis.speak(utterance);
-}
-
-function setupRecognition() {
-  if (!SpeechRecognition) {
-    voiceStatus.textContent = "Micrófono no compatible";
-    voiceText.textContent = "Tu navegador no soporta reconocimiento de voz. Igual puedo hablar, pero no escuchar comandos.";
-    return;
-  }
-
-  recognition = new SpeechRecognition();
-  recognition.lang = "es-EC";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = () => {
-    isListening = true;
-    voiceOrb.classList.add("listening");
-    voiceStatus.textContent = "Escuchando";
-    voiceText.textContent = `Di: Hola ${userProfile.assistantName}`;
-    voiceStartBtn.textContent = "Escuchando";
-  };
-
-  recognition.onresult = (event) => {
-    const lastResult = event.results[event.results.length - 1];
-    const transcript = lastResult[0].transcript.trim();
-
-    voiceText.textContent = transcript;
-    processVoiceInput(transcript);
-  };
-
-  recognition.onerror = () => {
-    voiceStatus.textContent = "No pude escuchar bien";
-    voiceText.textContent = "Intenta nuevamente hablando más claro.";
-    stopVoiceAnimation();
-  };
-
-  recognition.onend = () => {
-    stopVoiceAnimation();
-
-    if (voiceAssistant.classList.contains("active")) {
-      setTimeout(() => {
-        try {
-          recognition.start();
-        } catch (error) {}
-      }, 700);
-    }
-  };
-}
-
-function openVoiceAssistant() {
-  voiceAssistant.classList.add("active");
-  assistantIsAwake = false;
-
-  voiceStatus.textContent = "Asistente listo";
-  voiceText.textContent = `Di: Hola ${userProfile.assistantName}`;
-
-  speak(`Hola ${userProfile.name}. Soy ${userProfile.assistantName}. Toca hablar y dime: Hola ${userProfile.assistantName}.`);
-}
-
-function closeVoiceAssistant() {
-  voiceAssistant.classList.remove("active");
-  assistantIsAwake = false;
-
-  if (recognition && isListening) {
-    recognition.stop();
-  }
-
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
-
-  stopVoiceAnimation();
-}
-
-function startVoiceAssistant() {
-  if (!recognition) {
-    voiceStatus.textContent = "Micrófono no compatible";
-    voiceText.textContent = "No puedo escuchar en este navegador, pero sí puedo responder con voz si el audio está activo.";
-    speak("No puedo escuchar en este navegador, pero sí puedo responder con voz si el audio está activo.");
-    return;
-  }
-
-  try {
-    recognition.start();
-  } catch (error) {
-    voiceStatus.textContent = "Ya estoy escuchando";
-  }
-}
-
-function stopVoiceAnimation() {
-  isListening = false;
-  voiceOrb.classList.remove("listening");
-  voiceStartBtn.textContent = "Hablar";
-}
-
-function processVoiceInput(command) {
-  const text = normalizeText(command);
-  const assistantName = normalizeText(userProfile.assistantName);
-
-  const wakePhrases = [
-    `hola ${assistantName}`,
-    `oye ${assistantName}`,
-    `hey ${assistantName}`,
-    assistantName
-  ];
-
-  const saidWakePhrase = wakePhrases.some((phrase) => text.includes(phrase));
-
-  if (saidWakePhrase && !assistantIsAwake) {
-    assistantIsAwake = true;
-
-    const response = `Hola ${userProfile.name}, soy ${userProfile.assistantName}. ¿Qué oportunidad de negocio quieres buscar hoy?`;
-
-    voiceStatus.textContent = "Activado";
-    voiceText.textContent = response;
-    speak(response);
-    return;
-  }
-
-  if (!assistantIsAwake) {
-    voiceStatus.textContent = "Esperando comando";
-    voiceText.textContent = `Primero di: Hola ${userProfile.assistantName}`;
-    return;
-  }
-
-  handleVoiceCommand(text);
-}
-
-function handleVoiceCommand(text) {
-  let response = "";
-
-  if (text.includes("inversionista") || text.includes("inversion") || text.includes("capital")) {
-    response = `Listo ${userProfile.name}, te muestro oportunidades de inversión y perfiles de capital privado.`;
-    showView("directoryView");
-    directorySearch.value = "inversionista capital";
-    directorySearch.dispatchEvent(new Event("input"));
-  } else if (text.includes("alianza") || text.includes("aliado") || text.includes("canje")) {
-    response = `Perfecto ${userProfile.name}, te muestro posibles alianzas estratégicas y opciones de canje comercial.`;
-    showView("directoryView");
-    directorySearch.value = "alianza centro comercial";
-    directorySearch.dispatchEvent(new Event("input"));
-  } else if (text.includes("venta") || text.includes("vender") || text.includes("clientes") || text.includes("comprador")) {
-    response = `Entendido ${userProfile.name}, te muestro opciones enfocadas en ventas, clientes y compradores.`;
-    showView("directoryView");
-    directorySearch.value = "ventas clientes marketing";
-    directorySearch.dispatchEvent(new Event("input"));
-  } else if (text.includes("chat") || text.includes("mensaje") || text.includes("contactar")) {
-    response = `Abriendo el chat de negocios, ${userProfile.name}.`;
-    showView("messagesView");
-  } else if (text.includes("perfil") || text.includes("portafolio") || text.includes("profesional")) {
-    response = `Abriendo tu perfil profesional, ${userProfile.name}.`;
-    showView("profileView");
-  } else if (text.includes("inicio") || text.includes("feed") || text.includes("networking")) {
-    response = `Volviendo al feed principal de networking empresarial, ${userProfile.name}.`;
-    showView("feedView");
-  } else if (text.includes("radio") || text.includes("publicidad") || text.includes("medios")) {
-    response = "Te muestro oportunidades relacionadas con radio, publicidad y medios.";
-    showView("directoryView");
-    directorySearch.value = "radio publicidad medios";
-    directorySearch.dispatchEvent(new Event("input"));
-  } else if (text.includes("ayuda") || text.includes("comandos") || text.includes("que puedes hacer")) {
-    response = "Puedo buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, abrir el chat, abrir el perfil o volver al inicio.";
-  } else {
-    response = `${userProfile.name}, puedo ayudarte a buscar inversionistas, alianzas, ventas, compradores, radio, publicidad, chat o perfiles profesionales.`;
-  }
-
-  voiceStatus.textContent = "Respuesta IA";
-  voiceText.textContent = response;
-  speak(response);
-}
-
-openVoiceBtn.addEventListener("click", openVoiceAssistant);
-voiceStartBtn.addEventListener("click", startVoiceAssistant);
-voiceCloseBtn.addEventListener("click", closeVoiceAssistant);
-
-voiceAssistant.addEventListener("click", (event) => {
-  if (event.target === voiceAssistant) closeVoiceAssistant();
-});
-
-if (window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = () => {
-    getBestVoice();
-  };
-}
-
-bindNavigation();
-setupRecognition();
-loadChat("laguna");
-showView("feedView");
-/* =========================
-   PERFIL LOCAL OBLIGATORIO
-   FOTO ÚNICA + WHATSAPP + CORREO
-========================= */
-
-const PROFILE_STORAGE_KEY = "businessUserProfile";
-
-const profileGateModal = document.getElementById("profileGateModal");
-const profileGateClose = document.getElementById("profileGateClose");
+const navButtons = document.querySelectorAll(".nav-btn");
+const protectedButtons = document.querySelectorAll(".protected-action");
+
+const profileModal = document.getElementById("profileModal");
+const closeProfileModal = document.getElementById("closeProfileModal");
 const profileForm = document.getElementById("profileForm");
-
 const profilePhotoInput = document.getElementById("profilePhotoInput");
 const photoPreview = document.getElementById("photoPreview");
 
@@ -498,47 +23,84 @@ const profileWhatsappInput = document.getElementById("profileWhatsappInput");
 const profileEmailInput = document.getElementById("profileEmailInput");
 const profileBioInput = document.getElementById("profileBioInput");
 
-function getLocalProfile() {
-  const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+const profilePhotoDisplay = document.getElementById("profilePhotoDisplay");
+const profileNameDisplay = document.getElementById("profileNameDisplay");
+const profileRoleDisplay = document.getElementById("profileRoleDisplay");
+const profileCompanyDisplay = document.getElementById("profileCompanyDisplay");
+const profileCityDisplay = document.getElementById("profileCityDisplay");
+const profileBioDisplay = document.getElementById("profileBioDisplay");
 
-  if (!savedProfile) return null;
+const openProfileModalBtn = document.getElementById("openProfileModalBtn");
+const openProfileFromHeader = document.getElementById("openProfileFromHeader");
+const editProfileBtn = document.getElementById("editProfileBtn");
+
+const directorySearch = document.getElementById("directorySearch");
+const directoryCards = document.querySelectorAll(".directory-card");
+const aiPrompt = document.getElementById("aiPrompt");
+const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
+const aiResult = document.getElementById("aiResult");
+
+const chatMessages = document.getElementById("chatMessages");
+const messageInput = document.getElementById("messageInput");
+const sendMessageBtn = document.getElementById("sendMessageBtn");
+const sendWhatsappBtn = document.getElementById("sendWhatsappBtn");
+const sendEmailBtn = document.getElementById("sendEmailBtn");
+const sendProfileBtn = document.getElementById("sendProfileBtn");
+
+const voiceModal = document.getElementById("voiceModal");
+const openVoiceBtn = document.getElementById("openVoiceBtn");
+const closeVoiceBtn = document.getElementById("closeVoiceBtn");
+const startVoiceBtn = document.getElementById("startVoiceBtn");
+const voiceOrb = document.getElementById("voiceOrb");
+const voiceStatus = document.getElementById("voiceStatus");
+const voiceText = document.getElementById("voiceText");
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition = null;
+let isListening = false;
+let assistantAwake = false;
+
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getProfile() {
+  const saved = localStorage.getItem(APP_PROFILE_KEY);
+
+  if (!saved) return null;
 
   try {
-    return JSON.parse(savedProfile);
-  } catch (error) {
+    return JSON.parse(saved);
+  } catch {
     return null;
   }
 }
 
-function saveLocalProfile(profile) {
-  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+function saveProfile(profile) {
+  localStorage.setItem(APP_PROFILE_KEY, JSON.stringify(profile));
 }
 
-function hasLocalProfile() {
-  const profile = getLocalProfile();
+function hasProfile() {
+  const profile = getProfile();
 
   return Boolean(
     profile &&
     profile.name &&
     profile.company &&
     profile.role &&
+    profile.city &&
     profile.whatsapp &&
     profile.email
   );
 }
 
-function openProfileGate() {
-  loadProfileIntoForm();
-  profileGateModal.classList.add("active");
-}
-
-function closeProfileGate() {
-  profileGateModal.classList.remove("active");
-}
-
 function requireProfile(callback) {
-  if (!hasLocalProfile()) {
-    openProfileGate();
+  if (!hasProfile()) {
+    openProfileModal();
     return false;
   }
 
@@ -549,8 +111,50 @@ function requireProfile(callback) {
   return true;
 }
 
-function normalizeWhatsappNumber(rawNumber) {
-  let number = String(rawNumber || "").replace(/\D/g, "");
+function showView(viewId) {
+  views.forEach(view => view.classList.remove("active"));
+
+  const target = document.getElementById(viewId);
+  if (target) target.classList.add("active");
+
+  navButtons.forEach(button => {
+    button.classList.remove("active");
+
+    if (button.dataset.go === viewId) {
+      button.classList.add("active");
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function bindNavigation() {
+  document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", event => {
+      const viewId = button.dataset.go;
+
+      if (button.classList.contains("protected-action")) {
+        event.preventDefault();
+        requireProfile(() => showView(viewId));
+        return;
+      }
+
+      showView(viewId);
+    });
+  });
+}
+
+function openProfileModal() {
+  loadProfileForm();
+  profileModal.classList.add("active");
+}
+
+function closeProfileModalFn() {
+  profileModal.classList.remove("active");
+}
+
+function normalizeWhatsapp(raw) {
+  let number = String(raw || "").replace(/\D/g, "");
 
   if (number.startsWith("0")) {
     number = "593" + number.substring(1);
@@ -563,13 +167,12 @@ function normalizeWhatsappNumber(rawNumber) {
   return number;
 }
 
-function buildWhatsappLink(rawNumber) {
-  const cleanNumber = normalizeWhatsappNumber(rawNumber);
-  return `https://wa.me/${cleanNumber}`;
+function buildWhatsappLink(raw) {
+  return `https://wa.me/${normalizeWhatsapp(raw)}`;
 }
 
-function loadProfileIntoForm() {
-  const profile = getLocalProfile();
+function loadProfileForm() {
+  const profile = getProfile();
 
   if (!profile) return;
 
@@ -586,46 +189,37 @@ function loadProfileIntoForm() {
   }
 }
 
-function updateVisibleProfileData() {
-  const profile = getLocalProfile();
+function updateProfileUI() {
+  const profile = getProfile();
 
   if (!profile) return;
 
-  const heroName = document.querySelector("#profileView .hero-profile-content h1");
-  const heroRole = document.querySelector("#profileView .profile-role");
-  const heroDescription = document.querySelector("#profileView .profile-description");
-  const professionalImg = document.querySelector("#profileView .professional-img");
+  const firstName = profile.name.split(" ")[0] || "Usuario";
+  defaultUser.name = firstName;
 
-  if (heroName && profile.name) {
-    const nameParts = profile.name.trim().split(" ");
-    const firstName = nameParts[0] || profile.name;
-    const lastName = nameParts.slice(1).join(" ") || profile.company;
+  profileNameDisplay.textContent = profile.name;
+  profileRoleDisplay.textContent = profile.role;
+  profileCompanyDisplay.textContent = profile.company;
+  profileCityDisplay.textContent = profile.city;
+  profileBioDisplay.textContent = profile.bio;
 
-    heroName.innerHTML = `${firstName}<br>${lastName}`;
+  if (profile.photo) {
+    profilePhotoDisplay.innerHTML = `<img src="${profile.photo}" alt="Foto de perfil" />`;
   }
-
-  if (heroRole && profile.role) {
-    heroRole.textContent = profile.role;
-  }
-
-  if (heroDescription && profile.bio) {
-    heroDescription.textContent = profile.bio;
-  }
-
-  if (professionalImg && profile.photo) {
-    professionalImg.src = profile.photo;
-  }
-
-  document.querySelectorAll(".profile .avatar").forEach((avatar) => {
-    if (avatar.id === "chatAvatar") return;
-
-    if (profile.photo && avatar.textContent.trim() === "PF") {
-      avatar.innerHTML = `<img src="${profile.photo}" alt="Perfil" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" />`;
-    }
-  });
 }
 
-if (profilePhotoInput) {
+function bindProfile() {
+  openProfileModalBtn.addEventListener("click", openProfileModal);
+  openProfileFromHeader.addEventListener("click", openProfileModal);
+  editProfileBtn.addEventListener("click", openProfileModal);
+  closeProfileModal.addEventListener("click", closeProfileModalFn);
+
+  profileModal.addEventListener("click", event => {
+    if (event.target === profileModal) {
+      closeProfileModalFn();
+    }
+  });
+
   profilePhotoInput.addEventListener("change", function () {
     const file = this.files[0];
 
@@ -637,33 +231,30 @@ if (profilePhotoInput) {
     }
 
     if (file.size > 1024 * 1024) {
-      alert("La imagen no debe pesar más de 1 MB.");
+      alert("La foto no debe pesar más de 1 MB.");
       return;
     }
 
     const reader = new FileReader();
 
-    reader.onload = function (event) {
-      const imageBase64 = event.target.result;
+    reader.onload = event => {
+      const photo = event.target.result;
 
-      photoPreview.innerHTML = `<img src="${imageBase64}" alt="Foto de perfil" />`;
+      photoPreview.innerHTML = `<img src="${photo}" alt="Foto de perfil" />`;
 
-      const currentProfile = getLocalProfile() || {};
-      currentProfile.photo = imageBase64;
-      saveLocalProfile(currentProfile);
-
-      updateVisibleProfileData();
+      const currentProfile = getProfile() || {};
+      currentProfile.photo = photo;
+      saveProfile(currentProfile);
+      updateProfileUI();
     };
 
     reader.readAsDataURL(file);
   });
-}
 
-if (profileForm) {
-  profileForm.addEventListener("submit", function (event) {
+  profileForm.addEventListener("submit", event => {
     event.preventDefault();
 
-    const currentProfile = getLocalProfile() || {};
+    const currentProfile = getProfile() || {};
 
     const profile = {
       ...currentProfile,
@@ -675,170 +266,366 @@ if (profileForm) {
       whatsappLink: buildWhatsappLink(profileWhatsappInput.value.trim()),
       email: profileEmailInput.value.trim(),
       bio: profileBioInput.value.trim(),
-      createdAt: currentProfile.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    saveLocalProfile(profile);
-    updateVisibleProfileData();
-    closeProfileGate();
-
-    if (typeof speak === "function") {
-      speak(`Perfil guardado. Bienvenido ${profile.name}.`);
+    if (
+      !profile.name ||
+      !profile.company ||
+      !profile.role ||
+      !profile.city ||
+      !profile.whatsapp ||
+      !profile.email ||
+      !profile.bio
+    ) {
+      alert("Completa todos los campos del perfil.");
+      return;
     }
 
+    saveProfile(profile);
+    updateProfileUI();
+    closeProfileModalFn();
+
+    speak(`Perfil guardado. Bienvenido ${profile.name}.`);
     alert("Perfil guardado correctamente.");
   });
 }
 
-if (profileGateClose) {
-  profileGateClose.addEventListener("click", closeProfileGate);
+function createMessage(text, type = "sent") {
+  const row = document.createElement("div");
+  row.className = `message-row ${type}`;
+
+  const bubble = document.createElement("div");
+  bubble.className = "message";
+  bubble.textContent = text;
+
+  row.appendChild(bubble);
+  return row;
 }
 
-if (profileGateModal) {
-  profileGateModal.addEventListener("click", function (event) {
-    if (event.target === profileGateModal) {
-      closeProfileGate();
+function scrollChatBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function sendChatMessage(text, autoReply = true) {
+  chatMessages.appendChild(createMessage(text, "sent"));
+  scrollChatBottom();
+
+  if (autoReply) {
+    setTimeout(() => {
+      chatMessages.appendChild(
+        createMessage(
+          "Perfecto. Con esa información podemos continuar la negociación directamente.",
+          "received"
+        )
+      );
+      scrollChatBottom();
+    }, 650);
+  }
+}
+
+function bindChat() {
+  sendMessageBtn.addEventListener("click", () => {
+    requireProfile(() => {
+      const text = messageInput.value.trim();
+
+      if (!text) return;
+
+      sendChatMessage(text);
+      messageInput.value = "";
+    });
+  });
+
+  messageInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      sendMessageBtn.click();
     }
   });
-}
 
-/* =========================
-   BLOQUEAR ACCIONES SIN PERFIL
-========================= */
+  sendWhatsappBtn.addEventListener("click", () => {
+    requireProfile(() => {
+      const profile = getProfile();
 
-function protectAppActions() {
-  const protectedSelectors = [
-    ".accent-action",
-    ".post-actions button",
-    ".directory-card button",
-    "#sendBtn",
-    "#aiSearchBtn",
-    "#voiceStartBtn"
-  ];
+      sendChatMessage(
+        `Hola, te comparto mi WhatsApp para continuar la conversación:\n${profile.whatsappLink}`
+      );
+    });
+  });
 
-  protectedSelectors.forEach((selector) => {
-    document.querySelectorAll(selector).forEach((button) => {
-      button.addEventListener(
-        "click",
-        function (event) {
-          if (!hasLocalProfile()) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            openProfileGate();
-          }
-        },
-        true
+  sendEmailBtn.addEventListener("click", () => {
+    requireProfile(() => {
+      const profile = getProfile();
+
+      sendChatMessage(
+        `Te comparto mi correo para avanzar con la propuesta:\n${profile.email}`
+      );
+    });
+  });
+
+  sendProfileBtn.addEventListener("click", () => {
+    requireProfile(() => {
+      const profile = getProfile();
+
+      sendChatMessage(
+        `Te comparto mi perfil profesional:\n${profile.name}\n${profile.company}\n${profile.role}\n${profile.city}\n${profile.bio}`
       );
     });
   });
 }
 
-/* =========================
-   BOTONES RÁPIDOS EN CHAT
-========================= */
+function bindDirectory() {
+  directorySearch.addEventListener("input", () => {
+    const query = normalizeText(directorySearch.value);
 
-function injectQuickContactActions() {
-  const chatPanel = document.querySelector(".chat-panel");
-  const chatArea = document.getElementById("chatMessages");
+    directoryCards.forEach(card => {
+      const title = normalizeText(card.querySelector("h3").textContent);
+      const text = normalizeText(card.querySelector("p").textContent);
+      const keywords = normalizeText(card.dataset.keywords);
 
-  if (!chatPanel || !chatArea) return;
+      const match =
+        title.includes(query) ||
+        text.includes(query) ||
+        keywords.includes(query);
 
-  if (document.querySelector(".quick-contact-actions")) return;
+      card.style.display = match ? "flex" : "none";
+    });
+  });
 
-  const quickActions = document.createElement("div");
-  quickActions.className = "quick-contact-actions";
+  aiAnalyzeBtn.addEventListener("click", () => {
+    requireProfile(() => {
+      const prompt = normalizeText(aiPrompt.value);
 
-  quickActions.innerHTML = `
-    <button type="button" id="sendWhatsappBtn">
-      <span class="material-symbols-rounded">call</span>
-      WhatsApp
-    </button>
+      if (!prompt) {
+        aiResult.textContent = "Escribe qué tipo de contacto o negocio estás buscando.";
+        speak("Escribe qué tipo de contacto o negocio estás buscando.");
+        return;
+      }
 
-    <button type="button" id="sendEmailBtn">
-      <span class="material-symbols-rounded">mail</span>
-      Correo
-    </button>
+      let response = "Macro recomienda crear una propuesta clara con objetivo, beneficio, contacto y siguiente paso.";
 
-    <button type="button" id="sendProfileBtn">
-      <span class="material-symbols-rounded">badge</span>
-      Perfil
-    </button>
-  `;
+      if (prompt.includes("inversion") || prompt.includes("capital") || prompt.includes("inversionista")) {
+        response = "Macro recomienda buscar un perfil inversionista. Prepara monto requerido, retorno estimado y proyección de ingresos.";
+      }
 
-  const notice = document.createElement("div");
-  notice.className = "chat-temp-notice";
-  notice.textContent =
-    "Chat temporal de negocios. Comparte tu WhatsApp o correo para continuar la negociación fuera de la plataforma.";
+      if (prompt.includes("alianza") || prompt.includes("canje") || prompt.includes("convenio")) {
+        response = "Macro recomienda buscar aliados estratégicos. Presenta qué entregas, qué recibes y cuál es el beneficio para ambas partes.";
+      }
 
-  chatPanel.insertBefore(notice, chatArea);
-  chatPanel.insertBefore(quickActions, chatArea);
+      if (prompt.includes("venta") || prompt.includes("cliente") || prompt.includes("comprador")) {
+        response = "Macro recomienda buscar compradores comerciales. Presenta tu oferta, precio, entregables y forma de contacto.";
+      }
 
-  document.getElementById("sendWhatsappBtn").addEventListener("click", sendMyWhatsapp);
-  document.getElementById("sendEmailBtn").addEventListener("click", sendMyEmail);
-  document.getElementById("sendProfileBtn").addEventListener("click", sendMyProfile);
-}
-
-function sendQuickChatMessage(message) {
-  if (!chatMessages) return;
-
-  chatMessages.appendChild(createMessage(message, "sent"));
-  scrollChatBottom();
-
-  setTimeout(() => {
-    chatMessages.appendChild(
-      createMessage(
-        "Perfecto, con ese contacto podemos continuar la negociación directamente.",
-        "received"
-      )
-    );
-
-    scrollChatBottom();
-  }, 650);
-}
-
-function sendMyWhatsapp() {
-  requireProfile(() => {
-    const profile = getLocalProfile();
-
-    const message =
-      `Hola, te comparto mi WhatsApp para continuar la conversación:\n${profile.whatsappLink}`;
-
-    sendQuickChatMessage(message);
+      aiResult.textContent = response;
+      speak(response);
+    });
   });
 }
 
-function sendMyEmail() {
+function getBestVoice() {
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+
+  return (
+    voices.find(voice => voice.lang === "es-EC") ||
+    voices.find(voice => voice.lang === "es-ES") ||
+    voices.find(voice => voice.lang.startsWith("es")) ||
+    voices[0] ||
+    null
+  );
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-EC";
+  utterance.rate = 0.92;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function setupVoice() {
+  if (!SpeechRecognition) {
+    voiceStatus.textContent = "Micrófono no compatible";
+    voiceText.textContent = "Este navegador puede hablar, pero no escuchar comandos.";
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "es-EC";
+  recognition.continuous = true;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    isListening = true;
+    voiceOrb.classList.add("listening");
+    voiceStatus.textContent = "Escuchando";
+    voiceText.textContent = "Di: Hola Macro";
+    startVoiceBtn.textContent = "Escuchando";
+  };
+
+  recognition.onresult = event => {
+    const result = event.results[event.results.length - 1][0].transcript;
+    processVoice(result);
+  };
+
+  recognition.onerror = () => {
+    voiceStatus.textContent = "No pude escuchar bien";
+    voiceText.textContent = "Intenta nuevamente.";
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    voiceOrb.classList.remove("listening");
+    startVoiceBtn.textContent = "Hablar";
+
+    if (voiceModal.classList.contains("active")) {
+      setTimeout(() => {
+        try {
+          recognition.start();
+        } catch {}
+      }, 700);
+    }
+  };
+}
+
+function openVoice() {
   requireProfile(() => {
-    const profile = getLocalProfile();
+    voiceModal.classList.add("active");
+    assistantAwake = false;
 
-    const message =
-      `Te comparto mi correo para avanzar con la propuesta:\n${profile.email}`;
+    voiceStatus.textContent = "Asistente Macro";
+    voiceText.textContent = "Di: Hola Macro";
 
-    sendQuickChatMessage(message);
+    speak(`Hola ${defaultUser.name}. Soy Macro. Toca hablar y dime Hola Macro.`);
   });
 }
 
-function sendMyProfile() {
+function closeVoice() {
+  voiceModal.classList.remove("active");
+  assistantAwake = false;
+
+  if (recognition && isListening) {
+    recognition.stop();
+  }
+
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+
+  voiceOrb.classList.remove("listening");
+  startVoiceBtn.textContent = "Hablar";
+}
+
+function startVoice() {
   requireProfile(() => {
-    const profile = getLocalProfile();
+    if (!recognition) {
+      speak("No puedo escuchar en este navegador, pero sí puedo hablar.");
+      return;
+    }
 
-    const profileText =
-      `Te comparto mi perfil profesional:\n` +
-      `${profile.name}\n` +
-      `${profile.company}\n` +
-      `${profile.role}\n` +
-      `${profile.city}\n` +
-      `${profile.bio}`;
-
-    sendQuickChatMessage(profileText);
+    try {
+      recognition.start();
+    } catch {
+      voiceStatus.textContent = "Ya estoy escuchando";
+    }
   });
 }
 
-/* =========================
-   INICIALIZAR PERFIL
-========================= */
+function processVoice(command) {
+  const text = normalizeText(command);
+  voiceText.textContent = command;
 
-protectAppActions();
-injectQuickContactActions();
-updateVisibleProfileData();
+  if (!assistantAwake) {
+    if (text.includes("hola macro") || text.includes("macro")) {
+      assistantAwake = true;
+
+      const response = `Hola ${defaultUser.name}, soy Macro. ¿Qué oportunidad de negocio quieres buscar hoy?`;
+      voiceStatus.textContent = "Activado";
+      voiceText.textContent = response;
+      speak(response);
+      return;
+    }
+
+    voiceStatus.textContent = "Esperando comando";
+    voiceText.textContent = "Primero di: Hola Macro";
+    return;
+  }
+
+  let response = "Puedo ayudarte a buscar inversión, alianzas, compradores, abrir chat o abrir tu perfil.";
+
+  if (text.includes("inversion") || text.includes("capital")) {
+    response = `Listo ${defaultUser.name}, busquemos perfiles de inversión.`;
+    showView("directoryView");
+    directorySearch.value = "inversionista capital";
+    directorySearch.dispatchEvent(new Event("input"));
+  }
+
+  if (text.includes("alianza") || text.includes("canje")) {
+    response = `Perfecto ${defaultUser.name}, busquemos aliados estratégicos.`;
+    showView("directoryView");
+    directorySearch.value = "alianza convenio";
+    directorySearch.dispatchEvent(new Event("input"));
+  }
+
+  if (text.includes("venta") || text.includes("comprador") || text.includes("cliente")) {
+    response = `Entendido ${defaultUser.name}, busquemos compradores comerciales.`;
+    showView("directoryView");
+    directorySearch.value = "comprador venta cliente";
+    directorySearch.dispatchEvent(new Event("input"));
+  }
+
+  if (text.includes("chat") || text.includes("mensaje")) {
+    response = `Abriendo el chat temporal, ${defaultUser.name}.`;
+    showView("chatView");
+  }
+
+  if (text.includes("perfil")) {
+    response = `Abriendo tu perfil profesional, ${defaultUser.name}.`;
+    showView("profileView");
+  }
+
+  if (text.includes("inicio")) {
+    response = `Volviendo al inicio, ${defaultUser.name}.`;
+    showView("homeView");
+  }
+
+  voiceStatus.textContent = "Respuesta";
+  voiceText.textContent = response;
+  speak(response);
+}
+
+function bindVoice() {
+  openVoiceBtn.addEventListener("click", openVoice);
+  closeVoiceBtn.addEventListener("click", closeVoice);
+  startVoiceBtn.addEventListener("click", startVoice);
+
+  voiceModal.addEventListener("click", event => {
+    if (event.target === voiceModal) {
+      closeVoice();
+    }
+  });
+
+  if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = getBestVoice;
+  }
+}
+
+function initApp() {
+  bindNavigation();
+  bindProfile();
+  bindChat();
+  bindDirectory();
+  bindVoice();
+  setupVoice();
+  updateProfileUI();
+  showView("homeView");
+}
+
+initApp();
