@@ -476,3 +476,369 @@ bindNavigation();
 setupRecognition();
 loadChat("laguna");
 showView("feedView");
+/* =========================
+   PERFIL LOCAL OBLIGATORIO
+   FOTO ÚNICA + WHATSAPP + CORREO
+========================= */
+
+const PROFILE_STORAGE_KEY = "businessUserProfile";
+
+const profileGateModal = document.getElementById("profileGateModal");
+const profileGateClose = document.getElementById("profileGateClose");
+const profileForm = document.getElementById("profileForm");
+
+const profilePhotoInput = document.getElementById("profilePhotoInput");
+const photoPreview = document.getElementById("photoPreview");
+
+const profileNameInput = document.getElementById("profileNameInput");
+const profileCompanyInput = document.getElementById("profileCompanyInput");
+const profileRoleInput = document.getElementById("profileRoleInput");
+const profileCityInput = document.getElementById("profileCityInput");
+const profileWhatsappInput = document.getElementById("profileWhatsappInput");
+const profileEmailInput = document.getElementById("profileEmailInput");
+const profileBioInput = document.getElementById("profileBioInput");
+
+function getLocalProfile() {
+  const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+
+  if (!savedProfile) return null;
+
+  try {
+    return JSON.parse(savedProfile);
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveLocalProfile(profile) {
+  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+}
+
+function hasLocalProfile() {
+  const profile = getLocalProfile();
+
+  return Boolean(
+    profile &&
+    profile.name &&
+    profile.company &&
+    profile.role &&
+    profile.whatsapp &&
+    profile.email
+  );
+}
+
+function openProfileGate() {
+  loadProfileIntoForm();
+  profileGateModal.classList.add("active");
+}
+
+function closeProfileGate() {
+  profileGateModal.classList.remove("active");
+}
+
+function requireProfile(callback) {
+  if (!hasLocalProfile()) {
+    openProfileGate();
+    return false;
+  }
+
+  if (typeof callback === "function") {
+    callback();
+  }
+
+  return true;
+}
+
+function normalizeWhatsappNumber(rawNumber) {
+  let number = String(rawNumber || "").replace(/\D/g, "");
+
+  if (number.startsWith("0")) {
+    number = "593" + number.substring(1);
+  }
+
+  if (!number.startsWith("593")) {
+    number = "593" + number;
+  }
+
+  return number;
+}
+
+function buildWhatsappLink(rawNumber) {
+  const cleanNumber = normalizeWhatsappNumber(rawNumber);
+  return `https://wa.me/${cleanNumber}`;
+}
+
+function loadProfileIntoForm() {
+  const profile = getLocalProfile();
+
+  if (!profile) return;
+
+  profileNameInput.value = profile.name || "";
+  profileCompanyInput.value = profile.company || "";
+  profileRoleInput.value = profile.role || "";
+  profileCityInput.value = profile.city || "";
+  profileWhatsappInput.value = profile.whatsapp || "";
+  profileEmailInput.value = profile.email || "";
+  profileBioInput.value = profile.bio || "";
+
+  if (profile.photo) {
+    photoPreview.innerHTML = `<img src="${profile.photo}" alt="Foto de perfil" />`;
+  }
+}
+
+function updateVisibleProfileData() {
+  const profile = getLocalProfile();
+
+  if (!profile) return;
+
+  const heroName = document.querySelector("#profileView .hero-profile-content h1");
+  const heroRole = document.querySelector("#profileView .profile-role");
+  const heroDescription = document.querySelector("#profileView .profile-description");
+  const professionalImg = document.querySelector("#profileView .professional-img");
+
+  if (heroName && profile.name) {
+    const nameParts = profile.name.trim().split(" ");
+    const firstName = nameParts[0] || profile.name;
+    const lastName = nameParts.slice(1).join(" ") || profile.company;
+
+    heroName.innerHTML = `${firstName}<br>${lastName}`;
+  }
+
+  if (heroRole && profile.role) {
+    heroRole.textContent = profile.role;
+  }
+
+  if (heroDescription && profile.bio) {
+    heroDescription.textContent = profile.bio;
+  }
+
+  if (professionalImg && profile.photo) {
+    professionalImg.src = profile.photo;
+  }
+
+  document.querySelectorAll(".profile .avatar").forEach((avatar) => {
+    if (avatar.id === "chatAvatar") return;
+
+    if (profile.photo && avatar.textContent.trim() === "PF") {
+      avatar.innerHTML = `<img src="${profile.photo}" alt="Perfil" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" />`;
+    }
+  });
+}
+
+if (profilePhotoInput) {
+  profilePhotoInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Solo puedes subir imágenes.");
+      return;
+    }
+
+    if (file.size > 1024 * 1024) {
+      alert("La imagen no debe pesar más de 1 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const imageBase64 = event.target.result;
+
+      photoPreview.innerHTML = `<img src="${imageBase64}" alt="Foto de perfil" />`;
+
+      const currentProfile = getLocalProfile() || {};
+      currentProfile.photo = imageBase64;
+      saveLocalProfile(currentProfile);
+
+      updateVisibleProfileData();
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+if (profileForm) {
+  profileForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const currentProfile = getLocalProfile() || {};
+
+    const profile = {
+      ...currentProfile,
+      name: profileNameInput.value.trim(),
+      company: profileCompanyInput.value.trim(),
+      role: profileRoleInput.value.trim(),
+      city: profileCityInput.value.trim(),
+      whatsapp: profileWhatsappInput.value.trim(),
+      whatsappLink: buildWhatsappLink(profileWhatsappInput.value.trim()),
+      email: profileEmailInput.value.trim(),
+      bio: profileBioInput.value.trim(),
+      createdAt: currentProfile.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    saveLocalProfile(profile);
+    updateVisibleProfileData();
+    closeProfileGate();
+
+    if (typeof speak === "function") {
+      speak(`Perfil guardado. Bienvenido ${profile.name}.`);
+    }
+
+    alert("Perfil guardado correctamente.");
+  });
+}
+
+if (profileGateClose) {
+  profileGateClose.addEventListener("click", closeProfileGate);
+}
+
+if (profileGateModal) {
+  profileGateModal.addEventListener("click", function (event) {
+    if (event.target === profileGateModal) {
+      closeProfileGate();
+    }
+  });
+}
+
+/* =========================
+   BLOQUEAR ACCIONES SIN PERFIL
+========================= */
+
+function protectAppActions() {
+  const protectedSelectors = [
+    ".accent-action",
+    ".post-actions button",
+    ".directory-card button",
+    "#sendBtn",
+    "#aiSearchBtn",
+    "#voiceStartBtn"
+  ];
+
+  protectedSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((button) => {
+      button.addEventListener(
+        "click",
+        function (event) {
+          if (!hasLocalProfile()) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openProfileGate();
+          }
+        },
+        true
+      );
+    });
+  });
+}
+
+/* =========================
+   BOTONES RÁPIDOS EN CHAT
+========================= */
+
+function injectQuickContactActions() {
+  const chatPanel = document.querySelector(".chat-panel");
+  const chatArea = document.getElementById("chatMessages");
+
+  if (!chatPanel || !chatArea) return;
+
+  if (document.querySelector(".quick-contact-actions")) return;
+
+  const quickActions = document.createElement("div");
+  quickActions.className = "quick-contact-actions";
+
+  quickActions.innerHTML = `
+    <button type="button" id="sendWhatsappBtn">
+      <span class="material-symbols-rounded">call</span>
+      WhatsApp
+    </button>
+
+    <button type="button" id="sendEmailBtn">
+      <span class="material-symbols-rounded">mail</span>
+      Correo
+    </button>
+
+    <button type="button" id="sendProfileBtn">
+      <span class="material-symbols-rounded">badge</span>
+      Perfil
+    </button>
+  `;
+
+  const notice = document.createElement("div");
+  notice.className = "chat-temp-notice";
+  notice.textContent =
+    "Chat temporal de negocios. Comparte tu WhatsApp o correo para continuar la negociación fuera de la plataforma.";
+
+  chatPanel.insertBefore(notice, chatArea);
+  chatPanel.insertBefore(quickActions, chatArea);
+
+  document.getElementById("sendWhatsappBtn").addEventListener("click", sendMyWhatsapp);
+  document.getElementById("sendEmailBtn").addEventListener("click", sendMyEmail);
+  document.getElementById("sendProfileBtn").addEventListener("click", sendMyProfile);
+}
+
+function sendQuickChatMessage(message) {
+  if (!chatMessages) return;
+
+  chatMessages.appendChild(createMessage(message, "sent"));
+  scrollChatBottom();
+
+  setTimeout(() => {
+    chatMessages.appendChild(
+      createMessage(
+        "Perfecto, con ese contacto podemos continuar la negociación directamente.",
+        "received"
+      )
+    );
+
+    scrollChatBottom();
+  }, 650);
+}
+
+function sendMyWhatsapp() {
+  requireProfile(() => {
+    const profile = getLocalProfile();
+
+    const message =
+      `Hola, te comparto mi WhatsApp para continuar la conversación:\n${profile.whatsappLink}`;
+
+    sendQuickChatMessage(message);
+  });
+}
+
+function sendMyEmail() {
+  requireProfile(() => {
+    const profile = getLocalProfile();
+
+    const message =
+      `Te comparto mi correo para avanzar con la propuesta:\n${profile.email}`;
+
+    sendQuickChatMessage(message);
+  });
+}
+
+function sendMyProfile() {
+  requireProfile(() => {
+    const profile = getLocalProfile();
+
+    const profileText =
+      `Te comparto mi perfil profesional:\n` +
+      `${profile.name}\n` +
+      `${profile.company}\n` +
+      `${profile.role}\n` +
+      `${profile.city}\n` +
+      `${profile.bio}`;
+
+    sendQuickChatMessage(profileText);
+  });
+}
+
+/* =========================
+   INICIALIZAR PERFIL
+========================= */
+
+protectAppActions();
+injectQuickContactActions();
+updateVisibleProfileData();
