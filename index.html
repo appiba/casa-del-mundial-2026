@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Macro Business</title>
+  <title>Business AI Network</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,17 +21,20 @@
     <div class="bg-glow bg-glow-one"></div>
     <div class="bg-glow bg-glow-two"></div>
 
-    <!-- INICIO -->
+    <!-- =========================
+         INICIO
+    ========================== -->
     <section class="view active" id="homeView">
 
       <header class="top-header">
         <div>
-          <p class="mini-label">Macro Business</p>
+          <p class="mini-label">Business AI Network</p>
           <h1>Conecta negocios</h1>
         </div>
 
-        <button class="icon-button" id="openProfileFromHeader">
-          <span class="material-symbols-rounded">person</span>
+        <button class="icon-button" id="openNotificationsBtn">
+          <span class="material-symbols-rounded">notifications</span>
+          <i id="notificationDot"></i>
         </button>
       </header>
 
@@ -40,7 +43,7 @@
           <span class="material-symbols-rounded">auto_awesome</span>
         </div>
 
-        <p>Asistente de oportunidades</p>
+        <p>Macro IA</p>
         <h2>Encuentra inversionistas, aliados, compradores y contactos estratégicos.</h2>
 
         <button class="primary-button protected-action" data-go="directoryView">
@@ -63,30 +66,32 @@
             <div class="profile-mini">
               <div class="avatar">IN</div>
               <div>
-                <h3>Inversionista privado</h3>
+                <h3>Inversionistas</h3>
                 <p>Capital para proyectos comerciales</p>
               </div>
             </div>
+
             <span class="status-tag">Inversión</span>
           </div>
 
           <p class="card-text">
-            Busca proyectos con flujo comercial, propuesta clara y posibilidad de crecimiento.
+            Conecta con perfiles interesados en proyectos con flujo comercial, propuesta clara y posibilidad de crecimiento.
           </p>
 
           <div class="info-grid">
             <div>
-              <small>Interés</small>
-              <strong>Negocios escalables</strong>
+              <small>Objetivo</small>
+              <strong>Levantar capital</strong>
             </div>
+
             <div>
-              <small>Contacto</small>
-              <strong>Chat temporal</strong>
+              <small>Acceso</small>
+              <strong>Conexión aprobada</strong>
             </div>
           </div>
 
-          <button class="secondary-button protected-action" data-go="chatView">
-            Contactar
+          <button class="secondary-button protected-action" data-go="directoryView">
+            Buscar perfiles
           </button>
         </article>
 
@@ -95,37 +100,41 @@
             <div class="profile-mini">
               <div class="avatar red">AL</div>
               <div>
-                <h3>Alianza comercial</h3>
-                <p>Marcas y empresas</p>
+                <h3>Alianzas comerciales</h3>
+                <p>Empresas, marcas y profesionales</p>
               </div>
             </div>
+
             <span class="status-tag">Alianza</span>
           </div>
 
           <p class="card-text">
-            Empresas interesadas en colaborar, intercambiar servicios y generar nuevos clientes.
+            Solicita conexión con usuarios verificados para crear convenios, canjes, ventas o reuniones directas.
           </p>
 
           <div class="info-grid">
             <div>
-              <small>Tipo</small>
-              <strong>Canje / convenio</strong>
+              <small>Formato</small>
+              <strong>Usuario a usuario</strong>
             </div>
+
             <div>
-              <small>Objetivo</small>
-              <strong>Ventas</strong>
+              <small>Chat</small>
+              <strong>Temporal</strong>
             </div>
           </div>
 
-          <button class="secondary-button protected-action" data-go="chatView">
-            Contactar
+          <button class="secondary-button protected-action" data-go="directoryView">
+            Ver directorio
           </button>
         </article>
 
       </main>
     </section>
 
-    <!-- DIRECTORIO -->
+    <!-- =========================
+         DIRECTORIO
+    ========================== -->
     <section class="view" id="directoryView">
 
       <header class="top-header">
@@ -146,7 +155,7 @@
 
       <section class="ai-box">
         <p>Macro IA</p>
-        <h2>Describe lo que buscas y la app te sugiere el tipo de contacto.</h2>
+        <h2>Describe qué buscas y la app te sugiere el tipo de contacto.</h2>
 
         <textarea id="aiPrompt" placeholder="Ej: Busco inversionista para un negocio que ya vende..."></textarea>
 
@@ -165,24 +174,24 @@
           <div class="directory-icon">IN</div>
           <span>Inversión</span>
           <h3>Perfil inversionista</h3>
-          <p>Personas o empresas interesadas en financiar proyectos comerciales.</p>
-          <button class="protected-action" data-go="chatView">Contactar</button>
+          <p>Usuarios interesados en financiar o analizar proyectos comerciales.</p>
+          <button class="protected-action request-connection-btn" data-target="Perfil inversionista">Solicitar conexión</button>
         </article>
 
         <article class="directory-card" data-keywords="alianza convenio canje empresa marca">
           <div class="directory-icon red">AL</div>
           <span>Alianza</span>
           <h3>Aliado estratégico</h3>
-          <p>Empresas que buscan colaborar con otros negocios.</p>
-          <button class="protected-action" data-go="chatView">Contactar</button>
+          <p>Empresas o profesionales que buscan colaborar con otros negocios.</p>
+          <button class="protected-action request-connection-btn" data-target="Aliado estratégico">Solicitar conexión</button>
         </article>
 
         <article class="directory-card" data-keywords="comprador venta cliente proveedor comercial">
           <div class="directory-icon">CO</div>
           <span>Comprador</span>
           <h3>Comprador comercial</h3>
-          <p>Contactos interesados en adquirir productos o servicios.</p>
-          <button class="protected-action" data-go="chatView">Contactar</button>
+          <p>Contactos interesados en adquirir productos, servicios o propuestas.</p>
+          <button class="protected-action request-connection-btn" data-target="Comprador comercial">Solicitar conexión</button>
         </article>
 
         <article class="directory-card" data-keywords="servicio proveedor marketing tecnologia diseño">
@@ -190,13 +199,15 @@
           <span>Servicio</span>
           <h3>Proveedor profesional</h3>
           <p>Servicios para empresas, marcas, negocios y emprendedores.</p>
-          <button class="protected-action" data-go="chatView">Contactar</button>
+          <button class="protected-action request-connection-btn" data-target="Proveedor profesional">Solicitar conexión</button>
         </article>
 
       </section>
     </section>
 
-    <!-- CHAT -->
+    <!-- =========================
+         CHAT TEMPORAL
+    ========================== -->
     <section class="view" id="chatView">
 
       <header class="top-header">
@@ -214,16 +225,16 @@
 
         <div class="chat-header">
           <div class="profile-mini">
-            <div class="avatar red">MB</div>
+            <div class="avatar red">BN</div>
             <div>
               <h3>Contacto de negocio</h3>
-              <p>Chat activo para intercambio rápido</p>
+              <p id="chatTimerText">Chat temporal activo</p>
             </div>
           </div>
         </div>
 
         <div class="chat-warning">
-          Este chat es temporal. Comparte WhatsApp o correo para continuar la negociación fuera de la plataforma.
+          Este chat es temporal. Comparte WhatsApp, correo o perfil para continuar la negociación fuera de la plataforma.
         </div>
 
         <div class="quick-actions">
@@ -261,7 +272,9 @@
       </section>
     </section>
 
-    <!-- PERFIL -->
+    <!-- =========================
+         PERFIL
+    ========================== -->
     <section class="view" id="profileView">
 
       <header class="top-header">
@@ -283,6 +296,10 @@
         <h2 id="profileNameDisplay">Crea tu perfil</h2>
         <p id="profileRoleDisplay">Perfil profesional de negocios</p>
 
+        <div class="profile-status-card" id="profileStatusCard">
+          Estado: Sin perfil
+        </div>
+
         <div class="profile-info-card">
           <strong id="profileCompanyDisplay">Empresa / Marca</strong>
           <span id="profileCityDisplay">Ciudad / País</span>
@@ -297,7 +314,304 @@
       </section>
     </section>
 
-    <!-- ASISTENTE DE VOZ -->
+    <!-- =========================
+         NOTIFICACIONES
+    ========================== -->
+    <section class="view" id="notificationsView">
+
+      <header class="top-header">
+        <div>
+          <p class="mini-label">Centro de alertas</p>
+          <h1>Notificaciones</h1>
+        </div>
+
+        <button class="icon-button" data-go="homeView">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </header>
+
+      <main class="notification-list" id="notificationList"></main>
+
+    </section>
+
+    <!-- =========================
+         ADMIN PRIVADO
+    ========================== -->
+    <section class="view" id="adminView">
+
+      <header class="top-header">
+        <div>
+          <p class="mini-label">Administrador general</p>
+          <h1>Panel privado</h1>
+        </div>
+
+        <button class="icon-button" id="adminLogoutBtn">
+          <span class="material-symbols-rounded">logout</span>
+        </button>
+      </header>
+
+      <section class="admin-stats">
+        <div>
+          <small>Usuarios</small>
+          <strong id="adminUsersCount">0</strong>
+        </div>
+
+        <div>
+          <small>Pendientes</small>
+          <strong id="adminPendingCount">0</strong>
+        </div>
+
+        <div>
+          <small>Notificaciones</small>
+          <strong id="adminNotificationsCount">0</strong>
+        </div>
+      </section>
+
+      <section class="admin-tabs">
+        <button class="admin-tab active" data-admin-tab="users">Usuarios</button>
+        <button class="admin-tab" data-admin-tab="codes">Códigos</button>
+        <button class="admin-tab" data-admin-tab="config">Config</button>
+      </section>
+
+      <section class="admin-panel active" id="adminUsersPanel">
+        <h2>Solicitudes de usuarios</h2>
+        <div class="admin-list" id="adminUsersList"></div>
+      </section>
+
+      <section class="admin-panel" id="adminCodesPanel">
+        <h2>Códigos generados</h2>
+        <div class="admin-list" id="adminCodesList"></div>
+      </section>
+
+      <section class="admin-panel" id="adminConfigPanel">
+        <h2>Configuración privada</h2>
+
+        <form class="admin-config-form" id="adminConfigForm">
+          <label>
+            <span>Correo del administrador</span>
+            <input id="adminEmailInput" type="email" placeholder="admin@empresa.com" />
+          </label>
+
+          <label>
+            <span>WhatsApp del administrador</span>
+            <input id="adminWhatsappInput" type="tel" placeholder="0980000000" />
+          </label>
+
+          <label>
+            <span>Horas de chat temporal</span>
+            <input id="adminChatHoursInput" type="number" min="1" max="24" placeholder="8" />
+          </label>
+
+          <button type="submit" class="primary-button">
+            Guardar configuración
+          </button>
+        </form>
+      </section>
+
+    </section>
+
+    <!-- =========================
+         MODAL LOGIN / REGISTRO / ACTIVACIÓN / CLAVE
+    ========================== -->
+    <div class="auth-modal" id="authModal">
+      <div class="auth-card">
+
+        <button class="modal-close" id="closeAuthModal">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+
+        <div class="modal-title">
+          <div class="modal-icon">
+            <span class="material-symbols-rounded">lock</span>
+          </div>
+
+          <p>Acceso profesional</p>
+          <h2 id="authTitle">Iniciar sesión</h2>
+          <span id="authSubtitle">
+            Entra con tu usuario y clave. Si eres administrador, el sistema abrirá tu panel privado automáticamente.
+          </span>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-tab="login">Login</button>
+          <button class="auth-tab" data-auth-tab="register">Registro</button>
+          <button class="auth-tab" data-auth-tab="activate">Activar</button>
+          <button class="auth-tab" data-auth-tab="forgot">Clave</button>
+        </div>
+
+        <form class="auth-form active" id="loginForm">
+          <label>
+            <span>Usuario</span>
+            <input id="loginUsernameInput" type="text" placeholder="Tu usuario" required />
+          </label>
+
+          <label>
+            <span>Clave</span>
+            <input id="loginPasswordInput" type="password" placeholder="Tu clave" required />
+          </label>
+
+          <button type="submit" class="primary-button">Entrar</button>
+        </form>
+
+        <form class="auth-form" id="registerForm">
+
+          <label class="photo-upload">
+            <input type="file" id="profilePhotoInput" accept="image/*" hidden />
+
+            <div class="photo-preview" id="photoPreview">
+              <span class="material-symbols-rounded">add_a_photo</span>
+            </div>
+
+            <div>
+              <strong>Foto de perfil</strong>
+              <small>Solo una foto principal. Si subes otra, reemplaza la anterior.</small>
+            </div>
+          </label>
+
+          <label>
+            <span>Nombre completo</span>
+            <input id="registerNameInput" type="text" placeholder="Ej: Edwin López" required />
+          </label>
+
+          <label>
+            <span>Empresa o marca</span>
+            <input id="registerCompanyInput" type="text" placeholder="Ej: Business AI Network" required />
+          </label>
+
+          <label>
+            <span>Cargo / actividad</span>
+            <input id="registerRoleInput" type="text" placeholder="Ej: Business Developer" required />
+          </label>
+
+          <label>
+            <span>Ciudad / país</span>
+            <input id="registerCityInput" type="text" placeholder="Ej: Ibarra, Ecuador" required />
+          </label>
+
+          <label>
+            <span>WhatsApp</span>
+            <input id="registerWhatsappInput" type="tel" placeholder="Ej: 0980000000" required />
+          </label>
+
+          <label>
+            <span>Correo</span>
+            <input id="registerEmailInput" type="email" placeholder="correo@empresa.com" required />
+          </label>
+
+          <label>
+            <span>Usuario</span>
+            <input id="registerUsernameInput" type="text" placeholder="Crea un usuario" required />
+          </label>
+
+          <label>
+            <span>Clave</span>
+            <input id="registerPasswordInput" type="password" placeholder="Crea una clave" required />
+          </label>
+
+          <label>
+            <span>Descripción corta</span>
+            <textarea id="registerBioInput" placeholder="Describe qué haces y qué tipo de contactos buscas..." required></textarea>
+          </label>
+
+          <button type="submit" class="primary-button">Enviar a revisión</button>
+        </form>
+
+        <form class="auth-form" id="activateForm">
+          <label>
+            <span>Usuario</span>
+            <input id="activateUsernameInput" type="text" placeholder="Tu usuario" required />
+          </label>
+
+          <label>
+            <span>Clave</span>
+            <input id="activatePasswordInput" type="password" placeholder="Tu clave" required />
+          </label>
+
+          <label>
+            <span>Código de activación</span>
+            <input id="activationCodeInput" type="text" placeholder="Ej: BAIN-123456" required />
+          </label>
+
+          <button type="submit" class="primary-button">Activar cuenta</button>
+        </form>
+
+        <form class="auth-form" id="forgotForm">
+          <label>
+            <span>Usuario o WhatsApp</span>
+            <input id="forgotIdentifierInput" type="text" placeholder="Usuario o número registrado" required />
+          </label>
+
+          <button type="button" class="secondary-button" id="generateResetBtn">
+            Solicitar código
+          </button>
+
+          <label>
+            <span>Código de recuperación</span>
+            <input id="resetCodeInput" type="text" placeholder="Ej: RESET-123456" />
+          </label>
+
+          <label>
+            <span>Nueva clave</span>
+            <input id="newPasswordInput" type="password" placeholder="Nueva clave" />
+          </label>
+
+          <button type="submit" class="primary-button">Cambiar clave</button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- =========================
+         MODAL SOLICITUD CONEXIÓN
+    ========================== -->
+    <div class="connection-modal" id="connectionModal">
+      <div class="connection-card">
+
+        <button class="modal-close" id="closeConnectionModal">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+
+        <div class="modal-title">
+          <div class="modal-icon">
+            <span class="material-symbols-rounded">handshake</span>
+          </div>
+
+          <p>Solicitud usuario a usuario</p>
+          <h2>Solicitar conexión</h2>
+          <span id="connectionTargetText">
+            Explica por qué quieres conectar.
+          </span>
+        </div>
+
+        <form id="connectionForm" class="auth-form active">
+          <label>
+            <span>Motivo</span>
+            <select id="connectionReasonInput" required>
+              <option value="">Selecciona una opción</option>
+              <option value="Busco inversión">Busco inversión</option>
+              <option value="Quiero presentar una alianza">Quiero presentar una alianza</option>
+              <option value="Quiero vender un servicio">Quiero vender un servicio</option>
+              <option value="Quiero comprar un servicio">Quiero comprar un servicio</option>
+              <option value="Quiero agendar una reunión">Quiero agendar una reunión</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Mensaje corto</span>
+            <textarea id="connectionMessageInput" placeholder="Escribe una presentación breve..." required></textarea>
+          </label>
+
+          <button type="submit" class="primary-button">
+            Enviar solicitud
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- =========================
+         MODAL DE VOZ
+    ========================== -->
     <div class="voice-modal" id="voiceModal">
       <div class="voice-card">
         <div class="voice-orb" id="voiceOrb">
@@ -314,85 +628,9 @@
       </div>
     </div>
 
-    <!-- MODAL CREAR PERFIL -->
-    <div class="profile-modal" id="profileModal">
-      <div class="profile-modal-card">
-
-        <button class="modal-close" id="closeProfileModal">
-          <span class="material-symbols-rounded">close</span>
-        </button>
-
-        <div class="modal-title">
-          <div class="modal-icon">
-            <span class="material-symbols-rounded">person_add</span>
-          </div>
-
-          <p>Acceso profesional</p>
-          <h2>Crea tu perfil</h2>
-          <span>
-            La app se puede explorar libremente, pero para contactar, chatear o compartir datos debes tener perfil.
-          </span>
-        </div>
-
-        <form id="profileForm" class="profile-form">
-
-          <label class="photo-upload">
-            <input type="file" id="profilePhotoInput" accept="image/*" hidden />
-
-            <div class="photo-preview" id="photoPreview">
-              <span class="material-symbols-rounded">add_a_photo</span>
-            </div>
-
-            <div>
-              <strong>Foto de perfil</strong>
-              <small>Solo una foto. Si subes otra, reemplaza la anterior.</small>
-            </div>
-          </label>
-
-          <label>
-            <span>Nombre completo</span>
-            <input id="profileNameInput" type="text" placeholder="Ej: Edwin López" required />
-          </label>
-
-          <label>
-            <span>Empresa o marca</span>
-            <input id="profileCompanyInput" type="text" placeholder="Ej: Macro Business" required />
-          </label>
-
-          <label>
-            <span>Cargo / actividad</span>
-            <input id="profileRoleInput" type="text" placeholder="Ej: Business Developer" required />
-          </label>
-
-          <label>
-            <span>Ciudad / país</span>
-            <input id="profileCityInput" type="text" placeholder="Ej: Ibarra, Ecuador" required />
-          </label>
-
-          <label>
-            <span>WhatsApp</span>
-            <input id="profileWhatsappInput" type="tel" placeholder="Ej: 0980000000" required />
-          </label>
-
-          <label>
-            <span>Correo</span>
-            <input id="profileEmailInput" type="email" placeholder="correo@empresa.com" required />
-          </label>
-
-          <label>
-            <span>Descripción corta</span>
-            <textarea id="profileBioInput" placeholder="Describe qué haces y qué tipo de contactos buscas..." required></textarea>
-          </label>
-
-          <button class="primary-button" type="submit">
-            Guardar perfil
-          </button>
-
-        </form>
-      </div>
-    </div>
-
-    <!-- MENÚ INFERIOR -->
+    <!-- =========================
+         MENÚ INFERIOR
+    ========================== -->
     <nav class="bottom-nav">
       <button class="nav-btn active" data-go="homeView">
         <span class="material-symbols-rounded">home</span>
