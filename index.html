@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
@@ -21,11 +20,7 @@
     <div class="bg-glow bg-glow-one"></div>
     <div class="bg-glow bg-glow-two"></div>
 
-    <!-- =========================
-         INICIO
-    ========================== -->
     <section class="view active" id="homeView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Business AI Network</p>
@@ -46,21 +41,26 @@
         <p>Macro IA</p>
         <h2>Encuentra inversionistas, aliados, compradores y contactos estratégicos.</h2>
 
-        <button class="primary-button protected-action" data-go="directoryView">
-          Explorar oportunidades
-        </button>
+        <div class="home-actions">
+          <button class="primary-button" id="openLoginBtn">
+            Ya tengo usuario / Entrar
+          </button>
+
+          <button class="secondary-button" id="openRegisterBtn">
+            Crear perfil profesional
+          </button>
+        </div>
       </section>
 
       <section class="chip-row">
         <button class="chip active">Todo</button>
         <button class="chip">Inversión</button>
         <button class="chip">Alianzas</button>
-        <button class="chip">Ventas</button>
+        <button class="chip">Eventos</button>
         <button class="chip">Servicios</button>
       </section>
 
       <main class="card-list">
-
         <article class="opportunity-card">
           <div class="card-head">
             <div class="profile-mini">
@@ -128,15 +128,10 @@
             Ver directorio
           </button>
         </article>
-
       </main>
     </section>
 
-    <!-- =========================
-         DIRECTORIO
-    ========================== -->
     <section class="view" id="directoryView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Directorio inteligente</p>
@@ -169,7 +164,6 @@
       </section>
 
       <section class="directory-grid">
-
         <article class="directory-card" data-keywords="inversionista capital dinero proyecto negocio">
           <div class="directory-icon">IN</div>
           <span>Inversión</span>
@@ -186,12 +180,12 @@
           <button class="protected-action request-connection-btn" data-target="Aliado estratégico">Solicitar conexión</button>
         </article>
 
-        <article class="directory-card" data-keywords="comprador venta cliente proveedor comercial">
-          <div class="directory-icon">CO</div>
-          <span>Comprador</span>
-          <h3>Comprador comercial</h3>
-          <p>Contactos interesados en adquirir productos, servicios o propuestas.</p>
-          <button class="protected-action request-connection-btn" data-target="Comprador comercial">Solicitar conexión</button>
+        <article class="directory-card" data-keywords="eventos produccion activaciones organizacion marcas">
+          <div class="directory-icon">EV</div>
+          <span>Eventos</span>
+          <h3>Eventos y activaciones</h3>
+          <p>Productores, marcas, espacios y empresas vinculadas con eventos.</p>
+          <button class="protected-action request-connection-btn" data-target="Eventos y activaciones">Solicitar conexión</button>
         </article>
 
         <article class="directory-card" data-keywords="servicio proveedor marketing tecnologia diseño">
@@ -201,15 +195,10 @@
           <p>Servicios para empresas, marcas, negocios y emprendedores.</p>
           <button class="protected-action request-connection-btn" data-target="Proveedor profesional">Solicitar conexión</button>
         </article>
-
       </section>
     </section>
 
-    <!-- =========================
-         CHAT TEMPORAL
-    ========================== -->
     <section class="view" id="chatView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Chat temporal</p>
@@ -222,7 +211,6 @@
       </header>
 
       <section class="chat-card">
-
         <div class="chat-header">
           <div class="profile-mini">
             <div class="avatar red">BN</div>
@@ -268,15 +256,10 @@
             <span class="material-symbols-rounded">send</span>
           </button>
         </footer>
-
       </section>
     </section>
 
-    <!-- =========================
-         PERFIL
-    ========================== -->
     <section class="view" id="profileView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Perfil profesional</p>
@@ -303,6 +286,7 @@
         <div class="profile-info-card">
           <strong id="profileCompanyDisplay">Empresa / Marca</strong>
           <span id="profileCityDisplay">Ciudad / País</span>
+          <span id="profileTypeDisplay">Grupo profesional</span>
           <p id="profileBioDisplay">
             Crea tu perfil para conectar con inversionistas, aliados y compradores.
           </p>
@@ -314,11 +298,7 @@
       </section>
     </section>
 
-    <!-- =========================
-         NOTIFICACIONES
-    ========================== -->
     <section class="view" id="notificationsView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Centro de alertas</p>
@@ -331,14 +311,9 @@
       </header>
 
       <main class="notification-list" id="notificationList"></main>
-
     </section>
 
-    <!-- =========================
-         ADMIN PRIVADO
-    ========================== -->
     <section class="view" id="adminView">
-
       <header class="top-header">
         <div>
           <p class="mini-label">Administrador general</p>
@@ -407,15 +382,10 @@
           </button>
         </form>
       </section>
-
     </section>
 
-    <!-- =========================
-         MODAL LOGIN / REGISTRO / ACTIVACIÓN / CLAVE
-    ========================== -->
     <div class="auth-modal" id="authModal">
       <div class="auth-card">
-
         <button class="modal-close" id="closeAuthModal">
           <span class="material-symbols-rounded">close</span>
         </button>
@@ -454,7 +424,6 @@
         </form>
 
         <form class="auth-form" id="registerForm">
-
           <label class="photo-upload">
             <input type="file" id="profilePhotoInput" accept="image/*" hidden />
 
@@ -481,6 +450,13 @@
           <label>
             <span>Cargo / actividad</span>
             <input id="registerRoleInput" type="text" placeholder="Ej: Business Developer" required />
+          </label>
+
+          <label>
+            <span>Grupo / categoría profesional</span>
+            <select id="registerTypeInput" required>
+              <option value="">Cargando grupos...</option>
+            </select>
           </label>
 
           <label>
@@ -557,16 +533,11 @@
 
           <button type="submit" class="primary-button">Cambiar clave</button>
         </form>
-
       </div>
     </div>
 
-    <!-- =========================
-         MODAL SOLICITUD CONEXIÓN
-    ========================== -->
     <div class="connection-modal" id="connectionModal">
       <div class="connection-card">
-
         <button class="modal-close" id="closeConnectionModal">
           <span class="material-symbols-rounded">close</span>
         </button>
@@ -605,13 +576,9 @@
             Enviar solicitud
           </button>
         </form>
-
       </div>
     </div>
 
-    <!-- =========================
-         MODAL DE VOZ
-    ========================== -->
     <div class="voice-modal" id="voiceModal">
       <div class="voice-card">
         <div class="voice-orb" id="voiceOrb">
@@ -628,9 +595,6 @@
       </div>
     </div>
 
-    <!-- =========================
-         MENÚ INFERIOR
-    ========================== -->
     <nav class="bottom-nav">
       <button class="nav-btn active" data-go="homeView">
         <span class="material-symbols-rounded">home</span>
@@ -656,7 +620,6 @@
         <small>Perfil</small>
       </button>
     </nav>
-
   </div>
 
   <script src="script.js"></script>
