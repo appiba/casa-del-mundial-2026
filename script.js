@@ -2,11 +2,13 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzcYlKEkiupB773DCWDzTV_
 
 const SESSION_KEY = "bain_current_session";
 const LOCAL_PHOTO_KEY = "bain_local_profile_photo";
+const LOCAL_GROUPS_KEY = "bain_profile_groups";
 
 let currentConnectionTarget = "";
 let profilePhotoBase64 = "";
 let currentUserNameForVoice = "Usuario";
 let currentUser = null;
+let profileGroups = [];
 
 const views = document.querySelectorAll(".view");
 const navButtons = document.querySelectorAll(".nav-btn");
@@ -28,6 +30,7 @@ const photoPreview = document.getElementById("photoPreview");
 const registerNameInput = document.getElementById("registerNameInput");
 const registerCompanyInput = document.getElementById("registerCompanyInput");
 const registerRoleInput = document.getElementById("registerRoleInput");
+const registerTypeInput = document.getElementById("registerTypeInput");
 const registerCityInput = document.getElementById("registerCityInput");
 const registerWhatsappInput = document.getElementById("registerWhatsappInput");
 const registerEmailInput = document.getElementById("registerEmailInput");
@@ -51,10 +54,14 @@ const profileNameDisplay = document.getElementById("profileNameDisplay");
 const profileRoleDisplay = document.getElementById("profileRoleDisplay");
 const profileCompanyDisplay = document.getElementById("profileCompanyDisplay");
 const profileCityDisplay = document.getElementById("profileCityDisplay");
+const profileTypeDisplay = document.getElementById("profileTypeDisplay");
 const profileBioDisplay = document.getElementById("profileBioDisplay");
 const profileStatusCard = document.getElementById("profileStatusCard");
 const openProfileModalBtn = document.getElementById("openProfileModalBtn");
 const editProfileBtn = document.getElementById("editProfileBtn");
+
+const openLoginBtn = document.getElementById("openLoginBtn");
+const openRegisterBtn = document.getElementById("openRegisterBtn");
 
 const directorySearch = document.getElementById("directorySearch");
 const directoryCards = document.querySelectorAll(".directory-card");
@@ -138,7 +145,7 @@ function saveSession(user, role) {
   localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
 
   if (currentUser.name) {
-    currentUserNameForVoice = currentUser.name.split(" ")[0];
+    currentUserNameForVoice = currentUser.name.split(" ")[0] || "Usuario";
   }
 
   updateProfileUI();
@@ -153,7 +160,7 @@ function loadSession() {
   }
 
   if (currentUser && currentUser.name) {
-    currentUserNameForVoice = currentUser.name.split(" ")[0];
+    currentUserNameForVoice = currentUser.name.split(" ")[0] || "Usuario";
   }
 }
 
@@ -254,8 +261,13 @@ function setAuthTab(tabName) {
     ]
   };
 
-  authTitle.textContent = titles[tabName][0];
-  authSubtitle.textContent = titles[tabName][1];
+  if (authTitle && titles[tabName]) {
+    authTitle.textContent = titles[tabName][0];
+  }
+
+  if (authSubtitle && titles[tabName]) {
+    authSubtitle.textContent = titles[tabName][1];
+  }
 }
 
 function requireActiveUser(callback) {
@@ -298,6 +310,76 @@ function bindNavigation() {
       showView(viewId);
     });
   });
+}
+
+async function loadProfileGroups() {
+  try {
+    const result = await apiRequest("getProfileGroups", {});
+    profileGroups = result.groups || [];
+
+    localStorage.setItem(LOCAL_GROUPS_KEY, JSON.stringify(profileGroups));
+    renderGroupSelect();
+  } catch {
+    try {
+      profileGroups = JSON.parse(localStorage.getItem(LOCAL_GROUPS_KEY)) || [];
+    } catch {
+      profileGroups = [];
+    }
+
+    if (!profileGroups.length) {
+      profileGroups = [
+        { group_key: "inversionista", group_name: "Inversionista" },
+        { group_key: "emprendedor", group_name: "Emprendedor" },
+        { group_key: "eventos", group_name: "Eventos" },
+        { group_key: "proveedor", group_name: "Proveedor" },
+        { group_key: "comprador", group_name: "Comprador" },
+        { group_key: "aliado_comercial", group_name: "Aliado comercial" },
+        { group_key: "servicios_profesionales", group_name: "Servicios profesionales" },
+        { group_key: "tecnologia", group_name: "Tecnología" },
+        { group_key: "turismo", group_name: "Turismo" },
+        { group_key: "gastronomia", group_name: "Gastronomía" },
+        { group_key: "medios_agencia", group_name: "Medios / Agencia" }
+      ];
+    }
+
+    renderGroupSelect();
+  }
+}
+
+function renderGroupSelect() {
+  if (!registerTypeInput) return;
+
+  registerTypeInput.innerHTML = `
+    <option value="">Selecciona tu grupo</option>
+    ${profileGroups.map(group => `
+      <option value="${group.group_key}">${group.group_name}</option>
+    `).join("")}
+  `;
+}
+
+function getTypeLabel(type) {
+  const group = profileGroups.find(item => item.group_key === type);
+
+  if (group) {
+    return `Grupo: ${group.group_name}`;
+  }
+
+  const labels = {
+    inversionista: "Grupo: Inversionista",
+    emprendedor: "Grupo: Emprendedor",
+    eventos: "Grupo: Eventos",
+    proveedor: "Grupo: Proveedor",
+    comprador: "Grupo: Comprador",
+    aliado_comercial: "Grupo: Aliado comercial",
+    servicios_profesionales: "Grupo: Servicios profesionales",
+    tecnologia: "Grupo: Tecnología",
+    turismo: "Grupo: Turismo",
+    gastronomia: "Grupo: Gastronomía",
+    medios_agencia: "Grupo: Medios / Agencia",
+    user: "Grupo: Usuario"
+  };
+
+  return labels[type] || "Grupo profesional";
 }
 
 function bindAuth() {
@@ -351,7 +433,6 @@ function bindAuth() {
 
       showView("profileView");
       alert("Tu perfil está pendiente de revisión del administrador.");
-
     } catch (error) {
       alert(error.message);
     }
@@ -364,20 +445,21 @@ function bindAuth() {
       name: registerNameInput.value.trim(),
       company: registerCompanyInput.value.trim(),
       role: registerRoleInput.value.trim(),
+      type: registerTypeInput.value.trim(),
       city: registerCityInput.value.trim(),
       whatsapp: registerWhatsappInput.value.trim(),
       email: registerEmailInput.value.trim(),
       username: registerUsernameInput.value.trim(),
       password: registerPasswordInput.value.trim(),
       bio: registerBioInput.value.trim(),
-      photo_url: profilePhotoBase64 || localStorage.getItem(LOCAL_PHOTO_KEY) || "",
-      type: "user"
+      photo_url: profilePhotoBase64 || localStorage.getItem(LOCAL_PHOTO_KEY) || ""
     };
 
     if (
       !payload.name ||
       !payload.company ||
       !payload.role ||
+      !payload.type ||
       !payload.city ||
       !payload.whatsapp ||
       !payload.email ||
@@ -397,8 +479,10 @@ function bindAuth() {
       updateProfileUI();
       showView("profileView");
 
-      alert("Perfil enviado a revisión del administrador.");
+      registerForm.reset();
+      photoPreview.innerHTML = `<span class="material-symbols-rounded">add_a_photo</span>`;
 
+      alert("Perfil enviado a revisión del administrador.");
     } catch (error) {
       alert(error.message);
     }
@@ -429,7 +513,6 @@ function bindAuth() {
       showView("homeView");
 
       alert("Cuenta activada correctamente.");
-
     } catch (error) {
       alert(error.message);
     }
@@ -449,7 +532,6 @@ function bindAuth() {
       });
 
       alert(result.message || "Código generado. El administrador podrá enviarlo por WhatsApp.");
-
     } catch (error) {
       alert(error.message);
     }
@@ -476,7 +558,6 @@ function bindAuth() {
 
       alert("Clave actualizada correctamente.");
       setAuthTab("login");
-
     } catch (error) {
       alert(error.message);
     }
@@ -556,6 +637,7 @@ function updateProfileUI() {
     profileRoleDisplay.textContent = "Perfil profesional de negocios";
     profileCompanyDisplay.textContent = "Empresa / Marca";
     profileCityDisplay.textContent = "Ciudad / País";
+    if (profileTypeDisplay) profileTypeDisplay.textContent = "Grupo profesional";
     profileBioDisplay.textContent = "Crea tu perfil para conectar con inversionistas, aliados y compradores.";
     profileStatusCard.textContent = "Estado: Sin perfil";
     profileStatusCard.className = "profile-status-card";
@@ -570,6 +652,7 @@ function updateProfileUI() {
   profileRoleDisplay.textContent = user.role || "Perfil profesional";
   profileCompanyDisplay.textContent = user.company || "Empresa / Marca";
   profileCityDisplay.textContent = user.city || "Ciudad / País";
+  if (profileTypeDisplay) profileTypeDisplay.textContent = getTypeLabel(user.type);
   profileBioDisplay.textContent = user.bio || "Sin descripción.";
 
   const photo = user.photo_url || localStorage.getItem(LOCAL_PHOTO_KEY);
@@ -604,6 +687,14 @@ function updateProfileUI() {
 function bindProfileButtons() {
   openProfileModalBtn.addEventListener("click", () => openAuth("register"));
   editProfileBtn.addEventListener("click", () => openAuth("register"));
+
+  if (openLoginBtn) {
+    openLoginBtn.addEventListener("click", () => openAuth("login"));
+  }
+
+  if (openRegisterBtn) {
+    openRegisterBtn.addEventListener("click", () => openAuth("register"));
+  }
 }
 
 function bindDirectory() {
@@ -642,6 +733,10 @@ function bindDirectory() {
 
       if (prompt.includes("alianza") || prompt.includes("canje") || prompt.includes("convenio")) {
         response = "Macro recomienda buscar aliados estratégicos. Presenta qué entregas, qué recibes y cuál es el beneficio para ambas partes.";
+      }
+
+      if (prompt.includes("evento") || prompt.includes("activacion") || prompt.includes("produccion")) {
+        response = "Macro recomienda buscar el grupo de eventos. Presenta fechas, público objetivo, presupuesto y propuesta de valor.";
       }
 
       if (prompt.includes("venta") || prompt.includes("cliente") || prompt.includes("comprador")) {
@@ -704,7 +799,6 @@ function bindConnection() {
       connectionForm.reset();
 
       alert("Solicitud enviada correctamente.");
-
     } catch (error) {
       alert(error.message);
     }
@@ -782,7 +876,7 @@ function bindChat() {
   sendProfileBtn.addEventListener("click", () => {
     requireActiveUser(() => {
       sendChatMessage(
-        `Te comparto mi perfil profesional:\n${currentUser.name}\n${currentUser.company}\n${currentUser.role}\n${currentUser.city}\n${currentUser.bio}`
+        `Te comparto mi perfil profesional:\n${currentUser.name}\n${currentUser.company}\n${currentUser.role}\n${getTypeLabel(currentUser.type)}\n${currentUser.city}\n${currentUser.bio}`
       );
     });
   });
@@ -802,7 +896,6 @@ async function updateNotificationDot() {
 
     const unread = result.notifications.filter(item => item.status === "unread");
     notificationDot.classList.toggle("active", unread.length > 0);
-
   } catch {
     notificationDot.classList.remove("active");
   }
@@ -853,7 +946,6 @@ async function renderNotifications() {
         </div>
       </article>
     `).join("");
-
   } catch (error) {
     notificationList.innerHTML = `
       <article class="notification-card">
@@ -872,7 +964,6 @@ async function markNotificationRead(notificationId) {
 
     renderNotifications();
     updateNotificationDot();
-
   } catch (error) {
     alert(error.message);
   }
@@ -909,6 +1000,12 @@ async function renderAdmin() {
     const notifications = result.notifications || [];
     const config = result.config || {};
 
+    if (result.groups && result.groups.length) {
+      profileGroups = result.groups;
+      localStorage.setItem(LOCAL_GROUPS_KEY, JSON.stringify(profileGroups));
+      renderGroupSelect();
+    }
+
     adminUsersCount.textContent = users.length;
     adminPendingCount.textContent = users.filter(u => u.status === "pending_review").length;
     adminNotificationsCount.textContent = notifications.filter(n => n.status === "unread").length;
@@ -919,6 +1016,7 @@ async function renderAdmin() {
         <p>
           ${user.company}<br>
           ${user.role}<br>
+          ${getTypeLabel(user.type)}<br>
           ${user.city}<br>
           WhatsApp: ${user.whatsapp}<br>
           Correo: ${user.email}<br>
@@ -987,7 +1085,6 @@ async function renderAdmin() {
     adminEmailInput.value = config.admin_contact_email || "";
     adminWhatsappInput.value = config.admin_contact_phone || "";
     adminChatHoursInput.value = config.default_chat_hours || 8;
-
   } catch (error) {
     adminUsersList.innerHTML = `
       <article class="admin-item">
@@ -1014,7 +1111,6 @@ async function approveUser(userId) {
     }
 
     renderAdmin();
-
   } catch (error) {
     alert(error.message);
   }
@@ -1031,7 +1127,6 @@ async function suspendUser(userId) {
 
     alert("Usuario suspendido.");
     renderAdmin();
-
   } catch (error) {
     alert(error.message);
   }
@@ -1048,7 +1143,6 @@ async function rejectUser(userId) {
 
     alert("Usuario rechazado.");
     renderAdmin();
-
   } catch (error) {
     alert(error.message);
   }
@@ -1094,7 +1188,6 @@ function bindAdmin() {
 
       alert("Configuración guardada.");
       renderAdmin();
-
     } catch (error) {
       alert(error.message);
     }
@@ -1238,7 +1331,7 @@ function processVoice(command) {
     return;
   }
 
-  let response = "Puedo ayudarte a buscar inversión, alianzas, compradores, abrir chat o abrir tu perfil.";
+  let response = "Puedo ayudarte a buscar inversión, alianzas, eventos, compradores, abrir chat o abrir tu perfil.";
 
   if (text.includes("inversion") || text.includes("capital")) {
     response = `Listo ${currentUserNameForVoice}, busquemos perfiles de inversión.`;
@@ -1251,6 +1344,13 @@ function processVoice(command) {
     response = `Perfecto ${currentUserNameForVoice}, busquemos aliados estratégicos.`;
     showView("directoryView");
     directorySearch.value = "alianza convenio";
+    directorySearch.dispatchEvent(new Event("input"));
+  }
+
+  if (text.includes("evento") || text.includes("activacion") || text.includes("produccion")) {
+    response = `Entendido ${currentUserNameForVoice}, busquemos perfiles de eventos y activaciones.`;
+    showView("directoryView");
+    directorySearch.value = "eventos produccion activaciones";
     directorySearch.dispatchEvent(new Event("input"));
   }
 
@@ -1306,7 +1406,7 @@ async function testApiConnection() {
   }
 }
 
-function initApp() {
+async function initApp() {
   loadSession();
 
   bindNavigation();
@@ -1322,6 +1422,8 @@ function initApp() {
   openNotificationsBtn.addEventListener("click", () => {
     requireActiveUser(() => showView("notificationsView"));
   });
+
+  await loadProfileGroups();
 
   updateProfileUI();
   updateNotificationDot();
