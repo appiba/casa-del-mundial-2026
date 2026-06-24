@@ -219,6 +219,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .primary-button {
   width: 100%;
   min-height: 54px;
@@ -652,7 +658,14 @@ h1 {
   color: var(--red);
   font-size: 0.82rem;
   font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.profile-info-card span + span {
+  margin-top: -2px;
   margin-bottom: 10px;
+  color: #ffffff;
+  opacity: 0.78;
 }
 
 .profile-info-card p {
@@ -746,6 +759,11 @@ h1 {
   overflow-x: auto;
   scrollbar-width: none;
   margin-bottom: 16px;
+}
+
+.admin-tabs::-webkit-scrollbar,
+.auth-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-tab,
@@ -928,6 +946,19 @@ h1 {
 
 .auth-form select {
   appearance: none;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--red) 50%),
+    linear-gradient(135deg, var(--red) 50%, transparent 50%),
+    var(--card);
+  background-position:
+    calc(100% - 20px) 23px,
+    calc(100% - 14px) 23px,
+    0 0;
+  background-size:
+    6px 6px,
+    6px 6px,
+    100%;
+  background-repeat: no-repeat;
 }
 
 .photo-upload {
@@ -1111,5 +1142,9 @@ h1 {
 
   .info-grid {
     flex-direction: column;
+  }
+
+  h1 {
+    font-size: 1.76rem;
   }
 }
